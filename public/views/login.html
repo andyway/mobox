@@ -1,0 +1,44 @@
+<section id="content" class="m-t-lg wrapper-md animated fadeInUp">
+  <a class="nav-brand">todo</a>
+  <div class="row m-n">
+    <div class="col-md-4 col-md-offset-4 m-t-lg">
+      <section class="panel">
+        <header class="panel-heading text-center">
+          Sign in
+        </header>
+        <form class="panel-body" ng-submit="login()">
+          <div class="alert alert-danger" ng-show="error">Error logging in - invalid email or password</div>
+          <div class="form-group">
+            <label class="control-label">Email</label>
+            <input type="email" placeholder="test@example.com" class="form-control" ng-model="email">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Password</label>
+            <input type="password" id="inputPassword" placeholder="Password" class="form-control" ng-model="password">
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Keep me logged in
+            </label>
+          </div>
+          <a class="pull-right m-t-xs"><small>Forgot password?</small></a>
+          <button type="submit" class="btn btn-info">Sign in</button>
+          <div class="line line-dashed"></div>
+          <a class="btn btn-facebook btn-block m-b-sm"><i class="icon-facebook pull-left"></i>Sign in with Facebook</a>
+          <a class="btn btn-twitter btn-block"><i class="icon-twitter pull-left"></i>Sign in with Twitter</a>
+          <div class="line line-dashed"></div>
+          <p class="text-muted text-center"><small>Do not have an account?</small></p>
+          <a href="#/register" class="btn btn-white btn-block">Create an account</a>
+        </form>
+      </section>
+    </div>
+  </div>
+</section>
+<!-- footer -->
+<footer id="footer">
+  <div class="text-center padder clearfix">
+    <p>
+      <small>Mobile first web app framework base on Bootstrap<br>&copy; 2013</small>
+    </p>
+  </div>
+</footer>

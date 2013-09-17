@@ -1,0 +1,30 @@
+{
+    "db": "mongodb://localhost/mean-dev",
+    "port": 4000,
+    "app": {
+        "name": "Expense tracker"
+    },
+    "security": {
+        "tokenLife" : 3600
+    },
+    "facebook": {
+        "clientID": "APP_ID",
+        "clientSecret": "APP_SECRET",
+        "callbackURL": "http://localhost:4000/auth/facebook/callback"
+    },
+    "twitter": {
+        "clientID": "CONSUMER_KEY",
+        "clientSecret": "CONSUMER_SECRET",
+        "callbackURL": "http://localhost:4000/auth/twitter/callback"
+    },
+    "github": {
+        "clientID": "APP_ID",
+        "clientSecret": "APP_SECRET",
+        "callbackURL": "http://localhost:4000/auth/github/callback"
+    },
+    "google": {
+        "clientID": "APP_ID",
+        "clientSecret": "APP_SECRET",
+        "callbackURL": "http://localhost:4000/auth/google/callback"
+    }
+}

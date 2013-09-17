@@ -1,0 +1,47 @@
+<section id="content" class="m-t-lg wrapper-md animated fadeInDown">
+  <a class="nav-brand">todo</a>
+  <div class="row m-n">
+    <div class="col-md-4 col-md-offset-4 m-t-lg">
+      <section class="panel">
+        <header class="panel-heading bg bg-primary text-center">
+          Sign up
+        </header>
+        <form class="panel-body" meth1od="post" acti1on="/users" ng-submit="register()">
+          <div class="">
+          <div class="alert alert-success" ng-show="success">Successfully registered. Redirecting you to home view in {{ timeToRedirect }} seconds.</div>
+          <div class="alert alert-danger" ng-show="error">Error during registration (a user might already exist)</div>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Display name</label>
+            <input type="text" placeholder="eg. Your name or company" class="form-control" ng-model="user.name" required="required">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Your email address</label>
+            <input type="email" placeholder="test@example.com" class="form-control" ng-model="user.email" required="required">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Type a password</label>
+            <input type="password" id="inputPassword" placeholder="Password" class="form-control" ng-model="user.password" required="required">
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="agreed" required="required"> Agree the <a href="#">terms and policy</a>
+            </label>
+          </div>
+          <button type="submit" class="btn btn-info">Sign up</button>
+          <div class="line line-dashed"></div>
+          <p class="text-muted text-center"><small>Already have an account?</small></p>
+          <a href="#/login" class="btn btn-white btn-block">Sign in</a>
+        </form>
+      </section>
+    </div>
+  </div>
+</section>
+<!-- footer -->
+<footer id="footer">
+  <div class="text-center padder clearfix">
+    <p>
+      <small>Mobile first web app framework base on Bootstrap<br>&copy; 2013</small>
+    </p>
+  </div>
+</footer>
