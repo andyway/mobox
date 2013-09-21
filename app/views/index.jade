@@ -1,7 +1,10 @@
 extends layouts/default
 
+block sidebar
+  aside#nav.bg-dark.aside-sm(ng-include="'views/sidebar.html'" ng-controller="root.sidebar" ng-show="currentUser._id")
+
 block content
-  div(data-ng-view)
-  div(data-ui-view)
+  section#content
+    section.vbox(data-ui-view)
   script(type="text/javascript").
     window.user = !{user};

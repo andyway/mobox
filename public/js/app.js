@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('expence_tracker', ['ui.router', 'expence.user', 'expence.root']);
+angular.module('expence_tracker', ['ui.router', 'expence.root', 'expence.sidebar', 'expence.user', 'expence.project', 'expence.account']);

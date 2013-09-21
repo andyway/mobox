@@ -1,0 +1,23 @@
+<h3 class="font-thin">Create an account</h3>
+<form role="form" ng-submit="submit()">
+  <div class="form-group">
+    <label class="sr-only" for="formAccountName">Account name</label>
+    <input type="text" class="form-control" id="formAccountName" placeholder="Account name" ng-model="account.name" required>
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="formAccountDescription">Account description</label>
+    <textarea class="form-control" id="formAccountDescription" placeholder="Description" ng-model="account.description"></textarea>
+  </div>
+  <div class="form-horizontal">
+    <div class="form-group">
+      <label for="formAccountCurrency" class="col-lg-3 control-label">Account currency</label>
+      <div class="col-lg-4">
+        <select class="form-control" id="formAccountCurrency" ng-model="account.currency" ng-options="currency._id as currency.name for currency in currencies" required>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-default" ng-show="!account._id">Create</button>
+    <button type="submit" class="btn btn-default" ng-show="account._id">Save</button>
+    <button type="button" class="btn btn-danger" ng-show="account._id" ng-click="remove(acc)">Delete</button>
+  </div>
+</form>
