@@ -70,7 +70,7 @@
     <div ng-include="'views/project/root.index.edit.html'"></div>
   </section>    
   
-  <section class="panel text-center" ng-hide="isBeingEdited()" ng-click="edit()" style="height: 287px;">
+  <section class="panel text-center" ng-hide="!projects.length || isBeingEdited()" ng-click="edit()" style="height: 287px;">
     <header class="wrapper font-thin">
       <div style="margin: 25px 0;"><i class="icon-dribbble icon-5x"></i></div>
       <div><a class="btn btn-primary wrapper h3 font-thin" ng-click="edit()">Create new Project</a></div>
