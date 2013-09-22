@@ -3,29 +3,19 @@
   <div class="slim-scroll wrapper" data-height="auto" data-disable-fade-out="true" data-distance="0">
     <div class="row">
     
-      <div class="col-lg-8" ng-controller="project.root.list">
-        <div ng-show="!projects.length" class="panel text-center">
-          <div ng-show="!projects.length" class="panel-body">
-            <i class="icon-dribbble icon-5x"></i>
-            <div class="wrapper h3 font-thin">No projects yet <button class="btn btn-primary" ng-click="create()">Create</button></div>
-          </div>
-        </div>
-        <div class="row" ng-include="'views/project/root.list.html'">
-          <div class="col-sm-6">
-          </div>
-        </div>
+      <div class="col-lg-8" ng-controller="root.index.project">
+        <div ui-view="projects"></div>
       </div>
       
       <div class="col-lg-4">
-        <section class="panel" ng-controller="account.root.list">
+        <section class="panel" ng-controller="root.index.account"> 
           <header class="panel-heading bg-primary lter no-borders">
             Accounts 
-            <a href="" ng-click="create()" ng-show="!edit" class="pull-right">Add new</a>
-            <a href="" ng-click="edit = false" ng-show="edit" class="pull-right">Return</a>
+            <a ui-sref="root.index.accounts-edit" ng-show="!$state.includes('root.index.accounts-edit')" class="pull-right">Add new</a>
+            <a ui-sref="root.index.accounts" ng-show="$state.includes('root.index.accounts-edit')" class="pull-right">Return</a>
           </header>
-          <div class="panel-body" ng-class="{ 'bg-primary': !accounts.length }">
-            <div ng-show="!edit" ng-include="'views/account/root.list.html'"></div>  
-            <div ng-show="edit" ng-include="'views/account/root.edit.html'"></div>  
+          <div class="panel-body" ng-class="{ 'bg-primary': !userAccounts.data.length }">
+            <div ui-view="accounts" ng-animate="{enter:'fade-enter'}"></div>
           </div>
         </section>
       </div>    

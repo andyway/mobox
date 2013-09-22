@@ -12,8 +12,7 @@ var ProjectSchema = new Schema({
   description: {
     type: String,
     default: '',
-    trim: true,
-    required: true
+    trim: true
   },
   user: {
     type: Schema.ObjectId,

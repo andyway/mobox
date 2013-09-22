@@ -1,11 +1,11 @@
-<div ng-show="!accounts.length" class="wrapper h3 font-thin">No accounts yet <button class="btn btn-primary" ng-click="create()">Create</button></div>
+<div ng-show="!accounts.length" class="wrapper h3 font-thin">No accounts yet <a class="btn btn-primary" ui-sref="root.index.accounts-edit">Create</a></div>
 <div ng-repeat="acc in accounts">
   <article class="clearfix row">
     <div class="col-lg-2">
       <span class="h1">{{ acc.balance}}</span><i class="icon-{{ acc.currency.code}}"></i>
     </div>
     <div class="col-lg-10">                        
-      <div class="font-semibold">{{ acc.name }}<a href="" class="label bg-dark pull-right" ng-click="create(acc)">Edit</a></div>
+      <div class="font-semibold">{{ acc.name }}<a href="" class="label bg-dark pull-right" ui-sref="root.index.accounts-edit({ accountID: acc._id })">Edit</a></div>
       <div class="text-xs block m-t-xs"><i class="icon-list"></i> {{ acc.description }}</div>
     </div>
   </article>

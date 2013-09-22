@@ -80,6 +80,10 @@ module.exports = function(app, passport, auth, oauth2) {
   app.param('userId', users.user);
 
 
+  /**
+  * Accounts routes
+  * 
+  */
   var accounts = require('../app/controllers/accounts');
   app.get('/accounts', accounts.all);
   app.put('/accounts', auth.requiresLogin, accounts.create);
@@ -87,18 +91,32 @@ module.exports = function(app, passport, auth, oauth2) {
   app.post('/accounts/:accountId', auth.requiresLogin, accounts.update);
   app.del('/accounts/:accountId', auth.requiresLogin, accounts.destroy);
 
-  //Finish with setting up the articleId param
   app.param('accountId', accounts.account);
   
   var currencies = require('../app/controllers/currencies');
   app.get('/currencies', currencies.all);
-  
   
   /**
   * @todo - remove dummy function
   * 
   */
   app.get('/dummy/currency', currencies.dummy);
+
+  
+  /**
+  * Projects routes
+  * 
+  */
+  var projects = require('../app/controllers/projects');
+  app.get('/projects', projects.all);
+  app.put('/projects', auth.requiresLogin, projects.create);
+  app.get('/projects/:projectId', projects.show);
+  app.post('/projects/:projectId', auth.requiresLogin, projects.update);
+  app.del('/projects/:projectId', auth.requiresLogin, projects.destroy);
+
+  app.param('projectId', projects.project);
+  
+  
 
   
   //Home route

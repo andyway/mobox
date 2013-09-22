@@ -50,20 +50,21 @@
             <i class="icon-beaker"></i>
             <span>Projects</span>
           </a>
-          <ul class="dropdown-menu">                
+          <ul class="dropdown-menu" ng-controller="project.sidebar">                
+            <li ng-repeat="project in userProjects.data"><a href="">{{ project.name }}</a></li>
             <li class="divider"></li>
-            <li><a href="">Create</a></li>
+            <li><a ui-sref="root.index.projects-edit">Create</a></li>
           </ul>
         </li>
-         <li class="dropdown-submenu" ng-controller="account.root.list">
+         <li class="dropdown-submenu" ng-controller="account.sidebar">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="icon-file-text"></i>
             <span>Accounts</span>
           </a>
           <ul class="dropdown-menu">
-            <li ng-repeat="acc in accounts"><a href="">{{ acc.name }}</a></li>
+            <li ng-repeat="acc in userAccounts.data"><a href="">{{ acc.name }}</a></li>
             <li class="divider"></li>
-            <li><a href="" ng-click="create()">Create</a></li>
+            <li><a ui-sref="root.index.accounts-edit">Create</a></li>
           </ul>
         </li>
       </ul>

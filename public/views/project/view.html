@@ -1,0 +1,65 @@
+<section class="vbox">
+  <header class="header bg-light dker bg-gradient"><p>Project: {{ project.name }}</p></header>
+  <section class="">
+    <div class="slim-scroll wrapper" data-height="auto" data-disable-fade-out="true" data-distance="0">
+      <div class="row">
+        <div class="col-sm-2">
+
+          <section class="panel">
+            <header class="panel-heading bg-info lter no-borders">
+              <i class="icon-sun icon-1x pull-left border m-r"></i>
+              <div class="clearfix h4 font-thin">Categories</div>
+            </header>
+            
+            <div ui-view="categories"></div>
+            1<br />
+            2<br />
+            3<br />
+          </section>    
+
+          <section class="panel">
+            <header class="panel-heading bg-info lter no-borders">
+              <i class="icon-sun icon-1x pull-left border m-r"></i>
+              <div class="clearfix h4 font-thin">Accounts</div>
+            </header>
+            
+            <div ui-view="accounts"></div>
+            1<br />
+            2<br />
+            3<br />
+          </section>    
+
+          <section class="panel">
+            <header class="panel-heading bg-info lter no-borders">
+              <i class="icon-sun icon-1x pull-left border m-r"></i>
+              <div class="clearfix h4 font-thin">Users</div>
+            </header>
+            
+            <div ui-view="accounts"></div>
+            1<br />
+            2<br />
+            3<br />
+          </section>    
+
+        </div>
+
+        <div class="col-sm-10">
+          <section class="panel">
+            <header class="panel-heading bg-primary lter no-borders">
+              <i class="icon-sun icon-1x pull-left border m-r"></i>
+              <div class="clearfix h4 font-thin">Transactions</div>
+            </header>
+            
+            <div ui-view="transactions"></div>
+            1<br />
+            2<br />
+            3<br />
+          </section>
+              
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+{{ project }}

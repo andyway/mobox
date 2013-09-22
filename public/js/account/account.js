@@ -4,26 +4,44 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
   
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     
+    $stateProvider
+      .state('root.index.accounts', {
+        url: '',
+        views: {
+          accounts: {
+            templateUrl: 'views/account/root.index.list.html',
+            controller: 'root.index.account.list', 
+          },
+        }      
+      })
+
+      .state('root.index.accounts-edit', {
+        url: '/account/edit/:accountID',
+        views: {
+          'accounts@root': {
+            templateUrl: 'views/account/root.index.edit.html',
+            controller: 'root.index.account.edit', 
+          },
+        }      
+      })
+
+      ;             
   }])
 
-  .controller('account.root.list', ['$scope', '$state', 'User', 'currentUser', 'Account', 'Currency', 'userAccounts', function($scope, $state, User, currentUser, Account, Currency, userAccounts) {
-    userAccounts = Account.list();
-    $scope.accounts = userAccounts;
-    $scope.currencies = Currency.list();
+  .controller('root.index.account', ['$scope', 'userAccounts', function($scope, userAccounts) {
+    $scope.userAccounts = userAccounts;
+    console.log('root');
+  }])
+  
+  .controller('root.index.account.edit', ['$scope', '$state', '$stateParams', 'Account', 'Currency', function($scope, $state, $stateParams, Account, Currency) {
+    console.log('edit', $stateParams);
     $scope.account = { };
+    $scope.currencies = Currency.list();
     
-    $scope.create = function(acc) {
-      $scope.edit = true;
-
-      if (acc) {
-        $scope.account = acc;
-        $scope.account.currency = $scope.account.currency._id;
-      }
-      else {
-        $scope.account = { };
-      }
+    if ($stateParams.accountID) {
+      $scope.account = Account.get({id: $stateParams.accountID});
     }
-    
+
     $scope.submit = function() {
       if ($scope.account._id) {
         Account.update($scope.account, success);
@@ -41,11 +59,20 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     }
     
     var success = function(data) {
-      $scope.edit = false;
-      userAccounts = Account.list();
-      $scope.accounts = userAccounts;
+      $state.go('^');
     }
     
+  }])
+  
+  .controller('root.index.account.list', ['$rootScope', '$scope', '$state', 'Account', 'userAccounts', function($rootScope, $scope, $state, Account, userAccounts) {
+    console.log('list');
+    userAccounts.data = Account.list();
+    $scope.accounts = userAccounts.data;
+ }])
+
+  .controller('account.sidebar', ['$scope', 'userAccounts', function($scope, userAccounts) {
+    console.log('sidebar');
+    $scope.userAccounts = userAccounts;
   }])
 
   .factory('Account', function($resource){
@@ -64,7 +91,7 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
   })
   
   .factory('userAccounts', function(){
-    return { };
+    return { data: null };
   })
 
 ;

@@ -7,20 +7,38 @@ angular.module('expence.root', ['ngResource', 'ngCookies', 'ui.router', 'ui.boot
     $stateProvider
       .state('root', {
         url: '',
+        abstract: true,
         views: {
           '': {
             templateUrl: 'views/index.html',
-            controller: 'root.index', 
+            controller: 'root', 
           },
         }      
       })
 
-      ;             
+      .state('root.index', {
+        url: '/dashboard',
+        views: {
+          'projects': {
+            templateUrl: 'views/project/root.index.list.html',
+            controller: 'root.index.project.list', 
+          },
+          'accounts': {
+            templateUrl: 'views/account/root.index.list.html',
+            controller: 'root.index.account.list', 
+          },
+        }     
+      })
+
+      ;
+      
+      $urlRouterProvider.when('', '/dashboard');             
   }])
   
-  .controller('root.index', ['$scope', '$state', 'currentUser', function($scope, $state, currentUser) {
-    $scope.currentUser = currentUser;  
-    
+  .controller('root', ['$scope', '$state', '$stateParams', 'currentUser', function($scope, $state, $stateParams, currentUser) {
+    $scope.currentUser = currentUser;
+    $scope.$state = $state;
+    $state.go('root.index');
   }])
 
 ;

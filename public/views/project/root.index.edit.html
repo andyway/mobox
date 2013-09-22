@@ -1,0 +1,17 @@
+<div class="panel-body">
+  <form role="form" ng-submit="submit()">
+    <div class="form-group">
+      <label class="sr-only" for="formProjectName">Project name</label>
+      <input type="text" class="form-control" id="formProjectName" placeholder="Project name" ng-model="editableProject.name" required>
+    </div>
+    <div class="form-group">
+      <label class="sr-only" for="formProjectDescription">Project description</label>
+      <textarea class="form-control" id="formProjectDescription" placeholder="Description" ng-model="editableProject.description"></textarea>
+    </div>
+    <div class="form-horizontal">
+      <button type="submit" class="btn btn-default" ng-show="!editableProject._id">Create</button>
+      <button type="submit" class="btn btn-default" ng-show="editableProject._id">Save</button>
+      <button type="button" class="btn btn-danger" ng-show="editableProject._id" ng-click="remove(editableProject)">Delete</button>
+    </div>
+  </form>
+</div>
