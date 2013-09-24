@@ -28,21 +28,71 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
       */                                                                                 
 
       .state('project', {
+        abstract: true,
         url: '/project/:projectID',
         templateUrl: 'views/project/view.html',
-        controller: 'project.view', 
+        controller: 'project.view'
+      })
+
+      .state('project.view', {
+        url: '',
+        views: {
+          categories: {
+            templateUrl: 'views/category/project.list.html',
+            controller: 'project.category.list' 
+          },
+          access: {
+            templateUrl: 'views/project/project.access.list.html',
+            controller: 'project.access.list' 
+          },
+          accounts: {
+            templateUrl: 'views/account/project.list.html',
+            controller: 'project.account.list' 
+          },
+        }      
       })
 
       ;                                                                               
   }])
 
-  .controller('project.view', ['$scope', '$stateParams', 'Project', function($scope, $stateParams, Project) {
+  .controller('project.view', ['$scope', '$state', '$stateParams', 'Project', function($scope, $state, $stateParams, Project) {
     console.log('view');
-    $scope.project = Project.get({ id: $stateParams.projectID });
+    $scope.project = Project.get({ id: $stateParams.projectID }, function() {
+      if ($scope.project._acl && typeof($scope.project._acl) == 'string') {
+        $scope.project.access = $scope.project._acl;
+        delete ($scope.project._acl);
+      }
+    });
+    
+    $state.go('project.view');
   }])
   
   .controller('root.index.project', ['$scope', 'userProjects', function($scope, userProjects) {
     $scope.userProjects = userProjects;
+  }])
+  
+  .controller('project.access.list', ['$scope', '$state', 'Project', function($scope, $state, Project) {
+    $scope.access = 'Read';
+
+    $scope.submit = function(username, access) {
+      $scope.error = false;
+      username = username || $scope.username;
+      access = access || $scope.access;
+      
+      $scope.project.$addAccess({ access: access, username: username }, null, function(data) {
+        if (data.status == '404') {
+          $scope.error = true;
+        }
+      });  
+    }
+    
+    $scope.remove = function(username) {
+      $scope.project.$removeAccess({ id: $scope.project._id, username: username }, null, function(data) {
+        if (data.status == '404') {
+          $scope.error = true;
+        }
+      });  
+    }
   }])
   
   /*
@@ -132,11 +182,13 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
   }])
 
   .factory('Project', function($resource){
-    return $resource('/projects/:id', {}, {
+    return $resource('/projects/:id/:method', {}, {
       list: { method:'GET', params: { id: '@_id' }, isArray: true },
       update: { method:'POST', params: { id: '@_id' } },
       create: { method:'PUT', params: { id: '@_id' } },
-      remove: { method:'DELETE', params: { id: '@_id' } }
+      remove: { method:'DELETE', params: { id: '@_id' } },
+      addAccess: { method:'PUT', params: { id: '@_id', method: 'access' } },
+      removeAccess: { method:'DELETE', params: { id: '@_id', method: 'access', value: '@username' } }
     });
   })
   

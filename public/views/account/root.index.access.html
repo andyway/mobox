@@ -1,0 +1,28 @@
+<div class="font-thin h3">Account access rules</div><br />
+<div class="list-group no-radius alt" >
+  <div href="#" class="list-group-item" ng-repeat="user in account._acl">
+    <span class="dropdown pull-right">
+      <a class="badge dropdown-toggle" ng-class="{ 'bg-info': (user.access == 'Read'), 'bg-success': (user.access == 'Write') }">{{ user.access }}</a>
+      <ul class="dropdown-menu">
+        <li><a href="" ng-click="submit(user.username, 'Read')"><i class="icon-eye-open"></i> Read access</a></li>
+        <li><a href="" ng-click="submit(user.username, 'Write')"><i class="icon-pencil"></i> Write access</a></li>
+        <li><a href="" ng-click="remove(user.username)"><i class="icon-remove"></i> Remove</a></li>
+      </ul>
+    </span>
+    <i class="icon-thumbs-up"></i> 
+    {{ user.username }}
+  </div>
+</div>
+<form role="form" ng-submit="submit()">
+  <div class="alert alert-danger" ng-show="error">User does not exist (no email invitations supported yet).</div>
+  <div class="form-group">
+    <input type="text" class="form-control input-sm" placeholder="Give user access to the account" ng-model="username" required>
+  </div>
+  <div class="form-group">
+    <input type="submit" value="Give {{ access }} access" class="btn btn-sm btn-primary" />
+    <div class="btn-group pull-right">
+      <button type="button" class="btn btn-xs btn-info active" ng-model="access" btn-radio="'Read'"><i class="icon-eye-open"></i> Read</button>
+      <button type="button" class="btn btn-xs btn-success" ng-model="access" btn-radio="'Write'"><i class="icon-pencil"></i> Write</button>
+    </div>
+  </div>
+</form>

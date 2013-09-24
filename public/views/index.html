@@ -11,8 +11,8 @@
         <section class="panel" ng-controller="root.index.account"> 
           <header class="panel-heading bg-primary lter no-borders">
             Accounts 
-            <a ui-sref="root.index.accounts-edit" ng-show="!$state.includes('root.index.accounts-edit')" class="pull-right">Add new</a>
-            <a ui-sref="root.index.accounts" ng-show="$state.includes('root.index.accounts-edit')" class="pull-right">Return</a>
+            <a ui-sref="root.index.accounts-edit" ng-show="!$state.includes('root.index.accounts-edit') && !$state.includes('root.index.accounts-access')" class="pull-right">Add new</a>
+            <a ui-sref="root.index.accounts" ng-show="$state.includes('root.index.accounts-edit') || $state.includes('root.index.accounts-access')" class="pull-right">Return</a>
           </header>
           <div class="panel-body" ng-class="{ 'bg-primary': !userAccounts.data.length }">
             <div ui-view="accounts" ng-animate="{enter:'fade-enter'}"></div>

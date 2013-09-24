@@ -25,6 +25,16 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
         }      
       })
 
+      .state('root.index.accounts-access', {
+        url: '/account/access/:accountID',
+        views: {
+          'accounts@root': {
+            templateUrl: 'views/account/root.index.access.html',
+            controller: 'root.index.account.access', 
+          },
+        }      
+      })
+
       ;             
   }])
 
@@ -64,6 +74,36 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     
   }])
   
+  .controller('root.index.account.access', ['$scope', '$state', '$stateParams', 'Account', function($scope, $state, $stateParams, Account) {
+    $scope.access = 'Read';
+    $scope.account = Account.get({id: $stateParams.accountID }, function() {
+      if ($scope.account._acl && typeof($scope.account._acl) == 'string') {
+        $scope.account.access = $scope.account._acl;
+        delete ($scope.account._acl);
+      }
+    });
+    
+    $scope.submit = function(username, access) {
+      $scope.error = false;
+      username = username || $scope.username;
+      access = access || $scope.access;
+      
+      $scope.account.$addAccess({ access: access, username: username }, null, function(data) {
+        if (data.status == '404') {
+          $scope.error = true;
+        }
+      });  
+    }
+    
+    $scope.remove = function(username) {
+      $scope.account.$removeAccess({ id: $scope.account._id, username: username }, null, function(data) {
+        if (data.status == '404') {
+          $scope.error = true;
+        }
+      });  
+    }
+  }])
+  
   .controller('root.index.account.list', ['$rootScope', '$scope', '$state', 'Account', 'userAccounts', function($rootScope, $scope, $state, Account, userAccounts) {
     console.log('list');
     userAccounts.data = Account.list();
@@ -75,12 +115,19 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     $scope.userAccounts = userAccounts;
   }])
 
+  .controller('project.account.list', ['$scope', '$state', 'userAccounts', 'Account', function($scope, $state, userAccounts, Account) {
+    userAccounts.data = Account.list();
+    $scope.accounts = userAccounts.data;
+  }])
+  
   .factory('Account', function($resource){
-    return $resource('/accounts/:id', {}, {
+    return $resource('/accounts/:id/:method', {}, {
       list: { method:'GET', params: { id: '@_id' }, isArray: true },
       update: { method:'POST', params: { id: '@_id' } },
       create: { method:'PUT', params: { id: '@_id' } },
-      remove: { method:'DELETE', params: { id: '@_id' } }
+      remove: { method:'DELETE', params: { id: '@_id' } },
+      addAccess: { method:'PUT', params: { id: '@_id', method: 'access' } },
+      removeAccess: { method:'DELETE', params: { id: '@_id', method: 'access', value: '@username' } }
     });
   })
   

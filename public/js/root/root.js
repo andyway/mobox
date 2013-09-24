@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('expence.root', ['ngResource', 'ngCookies', 'ui.router', 'ui.bootstrap'])
+angular.module('expence.root', ['ngResource', 'ui.router', 'ui.bootstrap'])
   
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     

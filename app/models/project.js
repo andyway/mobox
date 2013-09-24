@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
   config = require('../../config/config'),
-  Schema = mongoose.Schema;
+  Schema = mongoose.Schema,
+  acl = require('../modules/mongoose-acl');
 
 var ProjectSchema = new Schema({
   name: {
@@ -19,6 +20,12 @@ var ProjectSchema = new Schema({
     ref: 'User',
     required: true
   }
+},
+{
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
 });
 
+
+ProjectSchema.plugin(acl.object);
 mongoose.model('Project', ProjectSchema);

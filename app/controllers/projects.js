@@ -1,13 +1,16 @@
 var mongoose = require('mongoose'),
   async = require('async'),
   Project = mongoose.model('Project'),
+  User = mongoose.model('User'),
   _ = require('underscore');
 
 exports.project = function(req, res, next, id) {
   Project.findById(id, function(err, project) {
     if (err) return next(err);
     if (!project) return next(new Error('Failed to load project ' + id));
+    
     req.project = project;
+
     next();
   });
 };
@@ -37,16 +40,19 @@ exports.destroy = function(req, res) {
 
   project.remove(function(err) {
     if (err) return res.render('error', { status: 500 });
-    res.jsonp(project);
+    res.jsonp(_.extend(project, {abc: 123}));
   });
 };
 
 exports.show = function(req, res) {
-  res.jsonp(req.project);
+  if (req.isObjectOwner) res.jsonp(req.project.toOwnerJSON());
+  else {
+    res.jsonp(req.project.toUserJSON(req.user));
+  }
 };
 
 exports.all = function(req, res) {
-  Project.find().populate('currency').exec(function(err, projects) {
+  Project.find({ $or: [ { user: req.user }, { _acl: { $elemMatch: { user: req.user } } } ] }).populate('currency').exec(function(err, projects) {
     if (err) {
       res.render('error', {
         status: 500
@@ -56,3 +62,22 @@ exports.all = function(req, res) {
     }
   });
 };
+
+exports.addAccess = function(req, res, next) {
+  var access = req.query.access;
+  if (access != 'Read' && access != 'Write' && access != 'Admin') {
+    return res.status(400).render('error', { status: 400 });
+  }
+  req.project.setAccess(req.accessUser, [req.query.access]);
+  req.project.save(function(err, project) {
+    res.jsonp(project.toOwnerJSON());
+  });
+};
+
+exports.removeAccess = function(req, res, next) {
+  req.project.removeAccess(req.accessUser);
+  req.project.save(function(err, project) {
+    res.jsonp(project.toOwnerJSON());
+  });
+};
+

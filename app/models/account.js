@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
   config = require('../../config/config'),
-  Schema = mongoose.Schema;
+  Schema = mongoose.Schema,
+  acl = require('../modules/mongoose-acl');
 
 var AccountSchema = new Schema({
   name: {
@@ -30,4 +31,5 @@ var AccountSchema = new Schema({
   }
 });
 
+AccountSchema.plugin(acl.object);
 mongoose.model('Account', AccountSchema);

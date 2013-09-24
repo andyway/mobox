@@ -43,11 +43,14 @@ exports.destroy = function(req, res) {
 };
 
 exports.show = function(req, res) {
-  res.jsonp(req.account);
+  if (req.isObjectOwner) res.jsonp(req.account.toOwnerJSON());
+  else {
+    res.jsonp(req.account.toUserJSON(req.user));
+  }
 };
 
 exports.all = function(req, res) {
-  Account.find().populate('currency').exec(function(err, accounts) {
+  Account.find({ $or: [ { user: req.user }, { _acl: { $elemMatch: { user: req.user } } } ] }).populate('currency').exec(function(err, accounts) {
     if (err) {
       res.render('error', {
         status: 500
@@ -55,5 +58,23 @@ exports.all = function(req, res) {
     } else {
       res.jsonp(accounts);
     }
+  });
+};
+
+exports.addAccess = function(req, res, next) {
+  var access = req.query.access;
+  if (access != 'Read' && access != 'Write' && access != 'Admin') {
+    return res.status(400).render('error', { status: 400 });
+  }
+  req.account.setAccess(req.accessUser, [req.query.access]);
+  req.account.save(function(err, account) {
+    res.jsonp(account.toOwnerJSON());
+  });
+};
+
+exports.removeAccess = function(req, res, next) {
+  req.account.removeAccess(req.accessUser);
+  req.account.save(function(err, account) {
+    res.jsonp(account.toOwnerJSON());
   });
 };

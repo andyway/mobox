@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('expence.user', ['ngResource', 'ngCookies', 'ui.router'])
+angular.module('expence.user', ['ngResource', 'ngCookies', 'ui.router', 'expence.project'])
   
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     
@@ -15,6 +15,7 @@ angular.module('expence.user', ['ngResource', 'ngCookies', 'ui.router'])
         templateUrl: 'views/register.html', 
         controller: 'user.register'
       })             
+
     ;
     
   }])
@@ -98,14 +99,6 @@ angular.module('expence.user', ['ngResource', 'ngCookies', 'ui.router'])
     
   }])
   
-  .controller('logout', ['$scope', '$http', '$location', 'Auth', 'User', 'currentUser', function($scope, $http, $location, Auth, User, currentUser) {
-    Auth.clearCredentials();
-    currentUser.name = null;
-    currentUser.login = null;
-    $location.path('/login');
-      
-  }])
-
   .factory('currentUser', function(){
     return { };
   })

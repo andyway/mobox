@@ -1,0 +1,11 @@
+<div class="list-group no-radius alt" >
+  <div class="list-group-item clearfix" ng-repeat="acc in accounts">
+    <div class="col-lg-2">
+      <span class="h1">{{ acc.balance}}</span><i class="icon-{{ acc.currency.code}}"></i>
+    </div>
+    <div class="col-lg-10">                        
+      <div class="font-semibold">{{ acc.name }}</div>
+      <div class="text-xs block m-t-xs"><i class="icon-list"></i> {{ acc.description }}</div>
+    </div>
+  </div>
+</div>

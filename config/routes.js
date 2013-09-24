@@ -87,9 +87,12 @@ module.exports = function(app, passport, auth, oauth2) {
   var accounts = require('../app/controllers/accounts');
   app.get('/accounts', accounts.all);
   app.put('/accounts', auth.requiresLogin, accounts.create);
-  app.get('/accounts/:accountId', accounts.show);
-  app.post('/accounts/:accountId', auth.requiresLogin, accounts.update);
-  app.del('/accounts/:accountId', auth.requiresLogin, accounts.destroy);
+  app.get('/accounts/:accountId', users.checkOwnership, accounts.show);
+  app.post('/accounts/:accountId', auth.requiresLogin, users.checkOwnership, users.requireOwnership, accounts.update);
+  app.del('/accounts/:accountId', auth.requiresLogin, users.checkOwnership, users.requireOwnership, accounts.destroy);
+
+  app.put('/accounts/:accountId/access', auth.requiresLogin, users.checkOwnership, users.requireOwnership, users.getByUsername, accounts.addAccess);
+  app.del('/accounts/:accountId/access', auth.requiresLogin, users.checkOwnership, users.requireOwnership, users.getByUsername, accounts.removeAccess);
 
   app.param('accountId', accounts.account);
   
@@ -108,15 +111,18 @@ module.exports = function(app, passport, auth, oauth2) {
   * 
   */
   var projects = require('../app/controllers/projects');
-  app.get('/projects', projects.all);
-  app.put('/projects', auth.requiresLogin, projects.create);
-  app.get('/projects/:projectId', projects.show);
-  app.post('/projects/:projectId', auth.requiresLogin, projects.update);
-  app.del('/projects/:projectId', auth.requiresLogin, projects.destroy);
-
   app.param('projectId', projects.project);
   
-  
+  app.get('/projects', projects.all);
+  app.put('/projects', auth.requiresLogin, projects.create);
+  app.get('/projects/:projectId', users.checkOwnership, projects.show);
+  app.post('/projects/:projectId', auth.requiresLogin, users.checkOwnership, users.requireOwnership, projects.update);
+  app.del('/projects/:projectId', auth.requiresLogin, users.checkOwnership, users.requireOwnership, projects.destroy);
+
+  app.put('/projects/:projectId/access', auth.requiresLogin, users.checkOwnership, users.requireOwnership, users.getByUsername, projects.addAccess);
+  app.del('/projects/:projectId/access', auth.requiresLogin, users.checkOwnership, users.requireOwnership, users.getByUsername, projects.removeAccess);
+
+  //app.get('/projects/:projectId/accounts', users.checkOwnership, projects.listAccounts);
 
   
   //Home route

@@ -5,7 +5,13 @@
       <span class="h1">{{ acc.balance}}</span><i class="icon-{{ acc.currency.code}}"></i>
     </div>
     <div class="col-lg-10">                        
-      <div class="font-semibold">{{ acc.name }}<a href="" class="label bg-dark pull-right" ui-sref="root.index.accounts-edit({ accountID: acc._id })">Edit</a></div>
+      <div class="font-semibold">
+        {{ acc.name }}
+        <div class="pull-right">
+          <a class="label bg-info" ui-sref="root.index.accounts-access({ accountID: acc._id })">Manage Access</a>
+          <a class="label bg-success" ui-sref="root.index.accounts-edit({ accountID: acc._id })">Edit</a>
+        </div>
+      </div>
       <div class="text-xs block m-t-xs"><i class="icon-list"></i> {{ acc.description }}</div>
     </div>
   </article>
