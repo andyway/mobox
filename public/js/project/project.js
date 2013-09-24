@@ -57,10 +57,16 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
 
   .controller('project.view', ['$scope', '$state', '$stateParams', 'Project', function($scope, $state, $stateParams, Project) {
     console.log('view');
+    $scope.showACL = false;
+    
     $scope.project = Project.get({ id: $stateParams.projectID }, function() {
       if ($scope.project._acl && typeof($scope.project._acl) == 'string') {
         $scope.project.access = $scope.project._acl;
         delete ($scope.project._acl);
+      }
+      
+      if ($scope.project._acl) {
+        $scope.showACL = true;
       }
     });
     
