@@ -40,12 +40,12 @@ exports.destroy = function(req, res) {
 
   project.remove(function(err) {
     if (err) return res.render('error', { status: 500 });
-    res.jsonp(_.extend(project, {abc: 123}));
+    res.jsonp(project);
   });
 };
 
 exports.show = function(req, res) {
-  if (req.isObjectOwner) res.jsonp(req.project.toOwnerJSON());
+  if (req.isProjectOwner) res.jsonp(req.project.toOwnerJSON());
   else {
     res.jsonp(req.project.toUserJSON(req.user));
   }

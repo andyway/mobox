@@ -43,7 +43,7 @@ exports.destroy = function(req, res) {
 };
 
 exports.show = function(req, res) {
-  if (req.isObjectOwner) res.jsonp(req.account.toOwnerJSON());
+  if (req.isAccountOwner) res.jsonp(req.account.toOwnerJSON());
   else {
     res.jsonp(req.account.toUserJSON(req.user));
   }

@@ -13,7 +13,7 @@
         <i class="icon-dribbble icon-5x pull-left border m-r"></i>
         <div class="clear">
           <div class="h3 m-t-xs m-b-xs"><a ui-sref="project.view({ projectID: project._id })">{{ project.name }}</a> 
-            <span class="h5 pull-right">
+            <span class="h5 pull-right" ng-show="project.user == currentUser._id">
               <a href="" class="label bg-success bg-dark" ng-click="edit(project)" ng-hide="isBeingEdited(project)">Edit</a>
               <a href="" class="label bg-success bg-dark" ng-click="view(project)" ng-show="isBeingEdited(project)">Return</a>
             </span>

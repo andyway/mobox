@@ -1,1 +1,23 @@
-1234
+<div class="list-group no-radius alt" ui:sortable>
+  <div href="#" class="list-group-item" ng-repeat="cat in categories">
+    <span class="dropdown pull-right">
+      <a class="badge dropdown-toggle" ng-class="bg-default">Edit</a>
+      <ul class="dropdown-menu">
+        <li><a href="" ng-click="edit(cat)"><i class="icon-pencil"></i> Edit</a></li>
+        <li><a href="" ng-click="remove(cat)"><i class="icon-remove"></i> Remove</a></li>
+      </ul>
+    </span>
+    <i class="icon-map-marker"></i> 
+    {{ cat.name }}
+  </div>
+</div>
+<form role="form" class="col-sm-12" ng-submit="submit()">
+  <div class="form-group">
+    <input type="text" class="form-control input-sm" placeholder="Create Category" ng-model="category.name" required>
+  </div>
+  <div class="form-group">
+    <input type="submit" value="Create" class="btn btn-sm btn-primary" ng-show="!category._id" />
+    <input type="submit" value="Save" class="btn btn-sm btn-primary" ng-show="category._id" />
+    <input type="button" ng-click="remove(category)" value="Remove" class="btn btn-sm btn-danger" ng-show="category._id" />
+  </div>
+</form>

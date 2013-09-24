@@ -31,7 +31,12 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
         abstract: true,
         url: '/project/:projectID',
         templateUrl: 'views/project/view.html',
-        controller: 'project.view'
+        controller: 'project.view',
+        resolve:{
+          theProject:  function($stateParams, Project) {
+            return Project.get({ id: $stateParams.projectID });
+          }
+        }
       })
 
       .state('project.view', {
@@ -55,20 +60,18 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
       ;                                                                               
   }])
 
-  .controller('project.view', ['$scope', '$state', '$stateParams', 'Project', function($scope, $state, $stateParams, Project) {
-    console.log('view');
+  .controller('project.view', ['$scope', '$state', '$stateParams', 'Project', 'theProject', function($scope, $state, $stateParams, Project, theProject) {
     $scope.showACL = false;
     
-    $scope.project = Project.get({ id: $stateParams.projectID }, function() {
-      if ($scope.project._acl && typeof($scope.project._acl) == 'string') {
-        $scope.project.access = $scope.project._acl;
-        delete ($scope.project._acl);
-      }
-      
-      if ($scope.project._acl) {
-        $scope.showACL = true;
-      }
-    });
+    $scope.project = theProject;
+    if ($scope.project._acl && typeof($scope.project._acl) == 'string') {
+      $scope.project.access = $scope.project._acl;
+      delete ($scope.project._acl);
+    }
+    
+    if ($scope.project._acl) {
+      $scope.showACL = true;
+    }
     
     $state.go('project.view');
   }])
@@ -77,7 +80,7 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
     $scope.userProjects = userProjects;
   }])
   
-  .controller('project.access.list', ['$scope', '$state', 'Project', function($scope, $state, Project) {
+  .controller('project.access.list', ['$scope', '$state', 'theProject', function($scope, $state, theProject) {
     $scope.access = 'Read';
 
     $scope.submit = function(username, access) {
@@ -85,7 +88,7 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
       username = username || $scope.username;
       access = access || $scope.access;
       
-      $scope.project.$addAccess({ access: access, username: username }, null, function(data) {
+      theProject.$addAccess({ access: access, username: username }, null, function(data) {
         if (data.status == '404') {
           $scope.error = true;
         }
@@ -93,7 +96,7 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
     }
     
     $scope.remove = function(username) {
-      $scope.project.$removeAccess({ id: $scope.project._id, username: username }, null, function(data) {
+      theProject.$removeAccess({ id: theProject._id, username: username }, null, function(data) {
         if (data.status == '404') {
           $scope.error = true;
         }
