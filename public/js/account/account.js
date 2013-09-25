@@ -115,9 +115,9 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     $scope.userAccounts = userAccounts;
   }])
 
-  .controller('project.account.list', ['$scope', '$state', 'userAccounts', 'Account', function($scope, $state, userAccounts, Account) {
-    userAccounts.data = Account.list();
-    $scope.accounts = userAccounts.data;
+  .controller('project.account.list', ['$scope', '$state', 'theProject', 'projectAccounts', 'Account', function($scope, $state, theProject, projectAccounts, Account) {
+    projectAccounts.data = Account.list();
+    $scope.accounts = projectAccounts.data;
   }])
   
   .factory('Account', function($resource){
@@ -141,4 +141,8 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     return { data: null };
   })
 
+  .factory('projectAccounts', function(){
+    return { data: null };
+  })
+  
 ;

@@ -32,6 +32,11 @@ var TransactionSchema = new Schema({
     ref: 'Account',
     required: true
   },
+  project: {
+    type: Schema.ObjectId,
+    ref: 'Project',
+    required: true
+  },
   category: {
     type: Schema.ObjectId,
     ref: 'Category'

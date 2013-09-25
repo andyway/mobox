@@ -27,7 +27,11 @@ module.exports = function(grunt) {
                 options: {
                     livereload: true
                 }
-            }
+            },
+            less: {
+              files: "public/less/**",
+              tasks: ["less"]
+            }        
         },
         jshint: {
             all: ['gruntfile.js', 'test/**/*.js', 'app/**/*.js']
@@ -48,6 +52,25 @@ module.exports = function(grunt) {
                     cwd: __dirname
                 }
             }
+        },
+        less: {
+          development: {
+            options: {
+              paths: ["public/less/**"]
+            },
+            files: {
+              "public/css/addons.css": "public/less/addons.less"
+            }
+          },
+          production: {
+            options: {
+              paths: ["public/less/**"],
+              yuicompress: true
+            },
+            files: {
+              "public/css/addons.css": "public/less/addons.less"
+            }
+          }
         },
         concurrent: {
             tasks: ['nodemon', 'watch'], 
@@ -81,6 +104,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.loadNpmTasks('grunt-concurrent');
     grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-contrib-less');
 
     //Making grunt default to force in order not to break the project.
     grunt.option('force', true);

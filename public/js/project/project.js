@@ -54,6 +54,10 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
             templateUrl: 'views/account/project.list.html',
             controller: 'project.account.list' 
           },
+          transactions: {
+            templateUrl: 'views/transaction/project.list.html',
+            controller: 'project.transaction.list' 
+          },
         }      
       })
 

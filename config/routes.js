@@ -118,9 +118,9 @@ module.exports = function(app, passport, auth, oauth2) {
   var transactions = require('../app/controllers/transactions');
   app.param('transactionId', transactions.transaction);
   
-  app.get('/projects/:projectId/transactions', auth.requiresLogin, auth.project.checkOwnership, transactions.all);
-  app.put('/projects/:projectId/transactions', auth.requiresLogin, auth.project.checkOwnership, transactions.create);
-  app.get('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, auth.project.checkOwnership, transactions.show);
+  app.get('/projects/:projectId/transactions', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireReadAccess, transactions.all);
+  app.put('/projects/:projectId/transactions', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireWriteAccess, transactions.create);
+  app.get('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireReadAccess, transactions.show);
   app.post('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, auth.project.checkOwnership, transactions.update);
   app.del('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, auth.project.checkOwnership, transactions.destroy);
   
@@ -129,6 +129,7 @@ module.exports = function(app, passport, auth, oauth2) {
   
   app.get('/projects/:projectId/categories', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireReadAccess, categories.all);
   app.put('/projects/:projectId/categories', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireWriteAccess, categories.create);
+  app.patch('/projects/:projectId/categories', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireWriteAccess, categories.sort, categories.all);
   app.get('/projects/:projectId/categories/:categoryId', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireReadAccess, categories.show);
   app.post('/projects/:projectId/categories/:categoryId', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireWriteAccess, categories.update);
   app.del('/projects/:projectId/categories/:categoryId', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireWriteAccess, categories.destroy);

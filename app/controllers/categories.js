@@ -50,7 +50,7 @@ exports.show = function(req, res) {
 };
 
 exports.all = function(req, res) {
-  Category.find({ project: req.project }).exec(function(err, categories) {
+  Category.find({ project: req.project }).sort('weight').exec(function(err, categories) {
     if (err) {
       res.render('error', {
         status: 500
@@ -59,5 +59,27 @@ exports.all = function(req, res) {
       res.jsonp(categories);
     }
   });
+};
+
+exports.sort = function(req, res, next) {
+  var weight = 0, categories = req.body.categories;
+  if (!req.body.categories || !req.body.categories.length) {
+    return res.send(400, 'Bad request');
+  }
+  
+  updateNext();
+  
+  function updateNext() {
+    var item;
+    if (!categories.length) {
+      return next();
+    } 
+    
+    item = categories.shift();
+    console.log(Category.findOneAndUpdate({ project: req.project, _id: item.id }, { weight: weight++, parent: item.parent }).exec(function() {
+      updateNext();
+    }));
+  }
+  
 };
 

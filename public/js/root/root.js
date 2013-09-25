@@ -41,4 +41,24 @@ angular.module('expence.root', ['ngResource', 'ui.router', 'ui.bootstrap'])
     $state.go('root.index');
   }])
 
+  .directive('nestable', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, elm, attrs) {
+        var options = scope.$eval(attrs.nestable), model = options.model || 'nestable';
+        
+        elm.nestable(options).on('change', function() {
+          scope[model] = [];
+          elm.find('[data-id]').each(function() {
+            var el = $(this), parent = $(this).parents('[data-id]').first();
+            if (!parent.length) parent = null;
+            else parent = parent.attr('data-id');
+            
+            scope[model].push({ id: el.attr('data-id'), parent: parent});
+          });
+          scope.$apply();
+        });
+      }
+    };
+  })
 ;

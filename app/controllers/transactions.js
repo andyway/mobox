@@ -17,7 +17,8 @@ exports.transaction = function(req, res, next, id) {
 
 exports.create = function(req, res, next) {
   var transaction = new Transaction(req.body);
-  transaction.user = req.user;
+  transaction.created_by = req.user;
+  transaction.project = req.project;
 
   transaction.save(function(err) {
     if (err) return next(err);
@@ -52,11 +53,9 @@ exports.show = function(req, res) {
 };
 
 exports.all = function(req, res) {
-  Transaction.find({ $or: [ { user: req.user }, { _acl: { $elemMatch: { user: req.user } } } ] }).populate('currency').exec(function(err, transactions) {
+  Transaction.find({ project: req.project }).exec(function(err, transactions) {
     if (err) {
-      res.render('error', {
-        status: 500
-      });
+      res.send(500, 'Database error');
     } else {
       res.jsonp(transactions);
     }

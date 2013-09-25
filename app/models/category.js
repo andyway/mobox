@@ -19,9 +19,13 @@ var CategorySchema = new Schema({
     ref: 'Project',
     required: true
   },
-  parent_category: {
+  parent: {
     type: Schema.ObjectId,
     ref: 'Category'
+  },
+  weight: {
+    type: Number,
+    default: 0
   }
 });
 

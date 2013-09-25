@@ -1,15 +1,16 @@
-<div class="list-group no-radius alt" ui:sortable>
-  <div href="#" class="list-group-item" ng-repeat="cat in categories">
-    <span class="dropdown pull-right">
-      <a class="badge dropdown-toggle" ng-class="bg-default">Edit</a>
-      <ul class="dropdown-menu">
-        <li><a href="" ng-click="edit(cat)"><i class="icon-pencil"></i> Edit</a></li>
-        <li><a href="" ng-click="remove(cat)"><i class="icon-remove"></i> Remove</a></li>
-      </ul>
-    </span>
-    <i class="icon-map-marker"></i> 
-    {{ cat.name }}
+<header class="panel-heading bg-info lter no-borders">
+  <i class="icon-sun icon-1x pull-left border m-r"></i>
+  <div class="clearfix">
+    <span class="h4 font-thin">Categories</span>
+    <a href="" ng-show="!isBeingSorted" class="pull-right" ng-click="isBeingSorted = !isBeingSorted">Sort</a>
+    <a href="" ng-show="isBeingSorted" class="pull-right text-danger" ng-click="finishSorting()">Finish sorting</a>
   </div>
+</header>
+            
+<div class="dd" nestable="{maxDepth: 2, model: 'nestable' }">
+  <ol class="list-group no-radius alt dd-list">
+    <li class="list-group-item dd-item" ng-repeat="cat in categories.root" data-id="{{ cat._id }}" ng-include="'project.category.list.branch'"></li>
+  </ol>
 </div>
 <form role="form" class="col-sm-12" ng-submit="submit()">
   <div class="form-group">
@@ -21,3 +22,20 @@
     <input type="button" ng-click="remove(category)" value="Remove" class="btn btn-sm btn-danger" ng-show="category._id" />
   </div>
 </form>
+
+<script type="text/ng-template"  id="project.category.list.branch">
+  <span class="dropdown pull-right">
+    <a class="badge dropdown-toggle" ng-class="bg-default">Edit</a>
+    <ul class="dropdown-menu">
+      <li><a href="" ng-click="edit(cat)"><i class="icon-pencil"></i> Edit</a></li>
+      <li><a href="" ng-click="remove(cat)"><i class="icon-remove"></i> Remove</a></li>
+    </ul>
+  </span>
+  <i class="icon-map-marker" ng-show="!isBeingSorted"></i> 
+  <i class="icon-sort text-danger dd-handle" ng-show="isBeingSorted"></i> 
+  {{ cat.name }}
+  
+  <ol class="list-group no-radius alt dd-list" ng-if="categories[cat._id].length">
+    <li class="list-group-item dd-item" ng-repeat="cat in categories[cat._id]" data-id="{{ cat._id }}" ng-include="'project.category.list.branch'"></li>
+  </ol>
+</script>
