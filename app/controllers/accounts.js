@@ -12,6 +12,18 @@ exports.account = function(req, res, next, id) {
   });
 };
 
+exports.getFromParam = function(req, res, next) {
+  if (!req.body.account) {
+    return res.send(500, 'Bad Request');
+  }
+  
+  Account.findById(req.body.account, function(err, account) {
+    if (err || !account) return next(new Error('Failed to load account ' + id));
+    req.account = account;
+    next();
+  });
+};
+
 exports.create = function(req, res, next) {
   var account = new Account(req.body);
   account.user = req.user;
@@ -51,12 +63,25 @@ exports.show = function(req, res) {
 
 exports.all = function(req, res) {
   Account.find({ $or: [ { user: req.user }, { _acl: { $elemMatch: { user: req.user } } } ] }).populate('currency').exec(function(err, accounts) {
+    var i=0, len, result = [];
     if (err) {
       res.render('error', {
         status: 500
       });
     } else {
-      res.jsonp(accounts);
+      len = accounts.length;
+      for (;i<len;i++) {
+        var access = accounts[i].getAccess(req.user); 
+        
+        if (access == 'Read' || access == 'Write') {
+          result.push(accounts[i].toUserJSON(req.user));
+        }
+        else {
+          result.push(accounts[i].toOwnerJSON());
+        }
+        
+      }
+      res.jsonp(result);
     }
   });
 };

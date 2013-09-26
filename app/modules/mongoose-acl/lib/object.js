@@ -33,10 +33,14 @@ module.exports = function(schema, options) {
 
     schema.methods.getAccess = function(user) {
       var length = this[options.path].length;
-      if (!user || !user._id) return this
+
+      if (!user) return null;
+      if (user._id) user = user._id;
+      user = user.toString();
+      
       for (var i=0;i<length; i++) {
         if (!this[options.path][i]) continue;
-        if (this[options.path][i].user.toString() == user._id.toString()) {
+        if (this[options.path][i].user.toString() == user) {
           return this[options.path][i].access;
         }
       }
@@ -48,7 +52,7 @@ module.exports = function(schema, options) {
       if (!this.removeAccess(key)) return false;
       
       this[options.path].push({
-        user: key,
+        user: key._id,
         username: key.email,
         access: perms
       });
@@ -105,12 +109,16 @@ module.exports = function(schema, options) {
 
     schema.methods.toOwnerJSON = function() {
       var data = toJSON ? toJSON.call(this) : this.toObject();
+      
+      data.access = 'Owner';
       return data;
     };
 
     schema.methods.toUserJSON = function(user) {
       var data = toJSON ? toJSON.call(this) : this.toObject();
-      data[options.path] = this.getAccess(user);
+      delete data[options.path];
+      
+      data.access = this.getAccess(user);
       return data;
     };
 

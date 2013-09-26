@@ -1,73 +1,49 @@
-<section class="vbox">
-  <header class="dker nav-bar">
-    <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="body">
-      <i class="icon-reorder"></i>
+<a class="navbar-brand" href="#">Mobox</a>
+<ul class="nav navbar-nav">
+  <li>
+    <a href="#" class="dropdown-toggle" style="background-color: transparent;">
+      <i class="icon-dribbble"></i>
+      <span>Projects</span>
     </a>
-    <a href="#" class="nav-brand" data-toggle="fullscreen">Mobox</a>
-    <a class="btn btn-link visible-xs" data-toggle="class:show" data-target=".nav-user">
-      <i class="icon-comment-alt"></i>
+    <ul class="dropdown-menu" ng-controller="project.sidebar">                
+      <span class="arrow top"></span>
+      <li ng-repeat="project in ProjectFactory.userProjects"><a ui-sref="root.project.view({ projectID: project._id })">{{ project.name }}</a></li>
+      <li class="divider"></li>
+      <li><a ui-sref="root.index.projects-edit">Create</a></li>
+    </ul>
+  </li>
+  <li ng-controller="account.sidebar">
+    <a href="#" class="dropdown-toggle" style="background-color: transparent;">
+      <i class="icon-usd"></i>
+      <span>Accounts</span>
     </a>
-  </header>
-  <footer class="footer bg-gradient hidden-xs">
-    <a href="/users/logout" class="btn btn-sm btn-link m-r-n-xs pull-right">
-      <i class="icon-off"></i>
+    <ul class="dropdown-menu">
+      <span class="arrow top"></span>
+      <li ng-repeat="acc in AccountFactory.userAccounts"><a href="">{{ acc.name }}</a></li>
+      <li class="divider"></li>
+      <li><a ui-sref="root.index.accounts-edit">Create</a></li>
+    </ul>
+  </li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+  <li>
+    <a href="#" class="dropdown-toggle" style="background-color: transparent;">
+      <i class="icon-user"></i>
+      <span>{{ currentUser.name }}</span>
     </a>
-    <a href="#nav" data-toggle="class:nav-vertical" class="btn btn-sm btn-link m-l-n-sm">
-      <i class="icon-reorder"></i>
-    </a>
-  </footer>
-  <section>
-    <div class="lter nav-user hidden-xs pos-rlt">            
-      <div class="nav-avatar pos-rlt">
-        <a href="#" class="thumb-sm avatar animated rollIn dropdown-toggle">
-          <img src="img/avatar_default.jpg" alt="" class="">
-          <span class="caret caret-white"></span>
+    <ul class="dropdown-menu m-t-sm">
+      <span class="arrow top"></span>
+      <li><a href="#">Settings</a></li>
+      <li><a href="#">Profile</a></li>
+      <li>
+        <a href="#">
+          <span class="badge bg-danger pull-right">3</span>
+          Notifications
         </a>
-        <ul class="dropdown-menu m-t-sm">
-          <span class="arrow top"></span>
-          <li><a href="#">Settings</a></li>
-          <li><a href="#">Profile</a></li>
-          <li>
-            <a href="#">
-              <span class="badge bg-danger pull-right">3</span>
-              Notifications
-            </a>
-          </li>
-          <li class="divider"></li>
-          <li><a href="#">Help</a></li>
-          <li><a href="/users/logout">Logout</a></li>
-        </ul>
-        <div class="visible-xs m-t m-b">
-          <a href="#" class="h3">John.Smith</a>
-          <p><i class="icon-map-marker"></i> London, UK</p>
-        </div>
-      </div>
-    </div>
-    <nav class="nav-primary hidden-xs">
-      <ul class="nav">
-        <li class="dropdown-submenu active">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-beaker"></i>
-            <span>Projects</span>
-          </a>
-          <ul class="dropdown-menu" ng-controller="project.sidebar">                
-            <li ng-repeat="project in userProjects.data"><a href="">{{ project.name }}</a></li>
-            <li class="divider"></li>
-            <li><a ui-sref="root.index.projects-edit">Create</a></li>
-          </ul>
-        </li>
-         <li class="dropdown-submenu" ng-controller="account.sidebar">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="icon-file-text"></i>
-            <span>Accounts</span>
-          </a>
-          <ul class="dropdown-menu">
-            <li ng-repeat="acc in userAccounts.data"><a href="">{{ acc.name }}</a></li>
-            <li class="divider"></li>
-            <li><a ui-sref="root.index.accounts-edit">Create</a></li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
-  </section>
-</section>
+      </li>
+      <li class="divider"></li>
+      <li><a href="#">Help</a></li>
+      <li><a href="/users/logout">Logout</a></li>
+    </ul>
+  </li>
+</ul>

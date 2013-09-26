@@ -1,13 +1,14 @@
-<div ng-show="!accounts.length" class="wrapper h3 font-thin">No accounts yet <a class="btn btn-primary" ui-sref="root.index.accounts-edit">Create</a></div>
-<div ng-repeat="acc in accounts">
+<div ng-show="!AccountFactory.userAccounts.length" class="wrapper h3 font-thin">No accounts yet <a class="btn btn-primary" ui-sref="root.index.accounts-edit">Create</a></div>
+<div ng-repeat="acc in AccountFactory.userAccounts" class="article-item">
+  <div ng-access-triangle="{ access: acc.access }"></div>
   <article class="clearfix row">
-    <div class="col-lg-2">
-      <span class="h1">{{ acc.balance}}</span><i class="icon-{{ acc.currency.code}}"></i>
+    <div class="col-lg-4">
+      <span class="h2">{{ acc.balance|number:2 }}</span><i class="icon-{{ acc.currency.code.toLowerCase() }}"></i>
     </div>
-    <div class="col-lg-10">                        
+    <div class="col-lg-8">                        
       <div class="font-semibold">
         {{ acc.name }}
-        <div class="pull-right">
+        <div ng-if="acc.access == 'Owner'" class="pull-right">
           <a class="label bg-info" ui-sref="root.index.accounts-access({ accountID: acc._id })">Manage Access</a>
           <a class="label bg-success" ui-sref="root.index.accounts-edit({ accountID: acc._id })">Edit</a>
         </div>

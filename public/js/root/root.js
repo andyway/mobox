@@ -35,8 +35,19 @@ angular.module('expence.root', ['ngResource', 'ui.router', 'ui.bootstrap'])
       $urlRouterProvider.when('', '/dashboard');             
   }])
   
-  .controller('root', ['$scope', '$state', '$stateParams', 'currentUser', function($scope, $state, $stateParams, currentUser) {
+  .run(['AccountFactory', 'ProjectFactory', 'Account', 'Project', function(AccountFactory, ProjectFactory, Account, Project) {
+    AccountFactory.userAccounts = Account.list();
+    ProjectFactory.userProjects = Project.list();
+
+  }])
+  
+  .controller('root', ['$scope', '$state', '$stateParams', 'currentUser', 'AccountFactory', 'ProjectFactory', function($scope, $state, $stateParams, currentUser, AccountFactory, ProjectFactory) {
     $scope.currentUser = currentUser;
+    
+    $scope.AccountFactory = AccountFactory.userAccounts;
+
+    $scope.ProjectFactory = ProjectFactory.userProjects;
+
     $scope.$state = $state;
     $state.go('root.index');
   }])
@@ -61,4 +72,26 @@ angular.module('expence.root', ['ngResource', 'ui.router', 'ui.bootstrap'])
       }
     };
   })
-;
+
+  .directive('ngAccessTriangle', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, elm, attrs) {
+        var options = scope.$eval(attrs.ngAccessTriangle);
+        
+        elm.addClass('ng-access-triangle access-'+options.access);
+        
+        if (options.access == 'Owner') {
+          elm.append('<label title="Owner access"><i class="icon-check"></i></label>');
+        }
+        if (options.access == 'Read') {
+          elm.append('<label title="Read access"><i class="icon-eye-open"></i></label>');
+        }
+        if (options.access == 'Write') {
+          elm.append('<label title="Write access"><i class="icon-pencil"></i></label>');
+        }
+      }
+    };
+  })
+
+  ;

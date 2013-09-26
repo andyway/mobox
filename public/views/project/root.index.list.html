@@ -1,4 +1,4 @@
-<div ng-show="!projects.length && !isBeingEdited()" class="panel text-center">
+<div ng-show="!ProjectFactory.userProjects.length && !isBeingEdited()" class="panel text-center">
   <div class="panel-body">
     <i class="icon-dribbble icon-5x"></i>
     <div class="wrapper h3 font-thin">No projects yet <a class="btn btn-primary" ng-click="edit()">Create</a></div>
@@ -6,13 +6,14 @@
 </div>
 
 
-<div class="col-sm-6" ng-repeat="project in projects">
+<div class="col-sm-6" ng-repeat="project in ProjectFactory.userProjects">
   <section class="panel">
     <header class="panel-heading bg-primary lter no-borders">
+      <div ng-access-triangle="{ access: project.access }"></div>
       <div class="clearfix">
         <i class="icon-dribbble icon-5x pull-left border m-r"></i>
         <div class="clear">
-          <div class="h3 m-t-xs m-b-xs"><a ui-sref="project.view({ projectID: project._id })">{{ project.name }}</a> 
+          <div class="h3 m-t-xs m-b-xs"><a ui-sref="root.project.view({ projectID: project._id })">{{ project.name }}</a> 
             <span class="h5 pull-right" ng-show="project.user == currentUser._id">
               <a href="" class="label bg-success bg-dark" ng-click="edit(project)" ng-hide="isBeingEdited(project)">Edit</a>
               <a href="" class="label bg-success bg-dark" ng-click="view(project)" ng-show="isBeingEdited(project)">Return</a>
@@ -70,7 +71,7 @@
     <div ng-include="'views/project/root.index.edit.html'"></div>
   </section>    
   
-  <section class="panel text-center" ng-hide="!projects.length || isBeingEdited()" ng-click="edit()" style="height: 287px;">
+  <section class="panel text-center" ng-hide="!ProjectFactory.userProjects.length || isBeingEdited()" ng-click="edit()" style="height: 287px;">
     <header class="wrapper font-thin">
       <div style="margin: 25px 0;"><i class="icon-dribbble icon-5x"></i></div>
       <div><a class="btn btn-primary wrapper h3 font-thin" ng-click="edit()">Create new Project</a></div>

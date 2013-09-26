@@ -1,10 +1,10 @@
 extends layouts/default
 
 block sidebar
-  aside#nav.bg-dark.aside-sm(ng-include="'views/sidebar.html'" ng-controller="root.sidebar" ng-show="currentUser._id")
+  header.header.bg-dark.bg-gradient(ng-include="'views/sidebar.html'" ng-controller="root.sidebar" ng-show="currentUser._id")
 
 block content
-  section#content
-    section.vbox(data-ui-view)
+  section.scrollable.wrapper
+    .row(data-ui-view)
   script(type="text/javascript").
     window.user = !{user};

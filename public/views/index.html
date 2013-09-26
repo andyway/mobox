@@ -1,4 +1,3 @@
-<header class="header bg-light dker bg-gradient"><p>Welcome, {{ currentUser.name }}</p></header>
 <section class="scrollable">
   <div class="slim-scroll wrapper" data-height="auto" data-disable-fade-out="true" data-distance="0">
     <div class="row">
@@ -14,7 +13,7 @@
             <a ui-sref="root.index.accounts-edit" ng-show="!$state.includes('root.index.accounts-edit') && !$state.includes('root.index.accounts-access')" class="pull-right">Add new</a>
             <a ui-sref="root.index.accounts" ng-show="$state.includes('root.index.accounts-edit') || $state.includes('root.index.accounts-access')" class="pull-right">Return</a>
           </header>
-          <div class="panel-body" ng-class="{ 'bg-primary': !userAccounts.data.length }">
+          <div class="panel-body" ng-class="{ 'bg-primary': !AccountFactory.userAccounts.length }">
             <div ui-view="accounts" ng-animate="{enter:'fade-enter'}"></div>
           </div>
         </section>

@@ -119,10 +119,10 @@ module.exports = function(app, passport, auth, oauth2) {
   app.param('transactionId', transactions.transaction);
   
   app.get('/projects/:projectId/transactions', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireReadAccess, transactions.all);
-  app.put('/projects/:projectId/transactions', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireWriteAccess, transactions.create);
+  app.put('/projects/:projectId/transactions', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireWriteAccess, accounts.getFromParam, auth.account.checkOwnership, auth.account.requireWriteAccess, transactions.create);
   app.get('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireReadAccess, transactions.show);
-  app.post('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, auth.project.checkOwnership, transactions.update);
-  app.del('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, auth.project.checkOwnership, transactions.destroy);
+  app.post('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireWriteAccess, accounts.getFromParam, auth.account.checkOwnership, auth.account.requireWriteAccess, transactions.update);
+  app.del('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, auth.project.checkOwnership, auth.project.requireWriteAccess, accounts.getFromParam, auth.account.checkOwnership, auth.account.requireWriteAccess, transactions.destroy);
   
   var categories = require('../app/controllers/categories');
   app.param('categoryId', categories.category);

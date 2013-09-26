@@ -52,13 +52,26 @@ exports.show = function(req, res) {
 };
 
 exports.all = function(req, res) {
+  var i=0, len, result = [];
   Project.find({ $or: [ { user: req.user }, { _acl: { $elemMatch: { user: req.user } } } ] }).populate('currency').exec(function(err, projects) {
     if (err) {
       res.render('error', {
         status: 500
       });
     } else {
-      res.jsonp(projects);
+      len = projects.length;
+      for (;i<len;i++) {
+        var access = projects[i].getAccess(req.user); 
+        
+        if (access == 'Read' || access == 'Write') {
+          result.push(projects[i].toUserJSON(req.user));
+        }
+        else {
+          result.push(projects[i].toOwnerJSON());
+        }
+        
+      }
+      res.jsonp(result);
     }
   });
 };

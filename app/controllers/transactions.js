@@ -1,7 +1,7 @@
 var mongoose = require('mongoose'),
   async = require('async'),
   Transaction = mongoose.model('Transaction'),
-  User = mongoose.model('User'),
+  Account = mongoose.model('Account'),
   _ = require('underscore');
 
 exports.transaction = function(req, res, next, id) {
@@ -20,8 +20,17 @@ exports.create = function(req, res, next) {
   transaction.created_by = req.user;
   transaction.project = req.project;
 
-  transaction.save(function(err) {
-    if (err) return next(err);
+  transaction.save(function(err, transaction) {
+    if (err) return res.send(500, err.message);
+    
+    if (transaction.type == 1) {
+      req.account.balance -= transaction.amount;
+    }
+    if (transaction.type == 2) {
+      req.account.balance += transaction.amount;
+    }
+    req.account.save();
+    
     res.jsonp(transaction);
   });
 };
@@ -41,7 +50,7 @@ exports.destroy = function(req, res) {
 
   transaction.remove(function(err) {
     if (err) return res.render('error', { status: 500 });
-    res.jsonp(_.extend(transaction, {abc: 123}));
+    res.jsonp(transaction);
   });
 };
 
@@ -53,7 +62,7 @@ exports.show = function(req, res) {
 };
 
 exports.all = function(req, res) {
-  Transaction.find({ project: req.project }).exec(function(err, transactions) {
+  Transaction.find({ project: req.project }).sort('-created').exec(function(err, transactions) {
     if (err) {
       res.send(500, 'Database error');
     } else {

@@ -1,6 +1,6 @@
 <div class="panel-body">
   <form role="form" class="form-inline" ng-submit="submit()">
-    <div class="alert alert-danger" ng-show="error">Error creating transaction</div>
+    <div class="alert alert-danger" ng-show="error">Error creating transaction: {{ error }}</div>
     <div class="row">
       <div class="form-group col-sm-2">
         <label for="formAmount">Amount</label>
@@ -17,11 +17,11 @@
       </div>
       <div class="form-group col-sm-2">
         <label for="formAccount">Account</label>
-        <select class="form-control input-sm" id="formAccount" ng-model="transaction.account" ng-options="account._id as account.name for account in projectAccounts.data" required></select>
+        <select class="form-control input-sm" id="formAccount" ng-model="transaction.account" ng-options="account._id as account.name for account in AccountFactory.projectAccounts" required></select>
       </div>
       <div class="form-group col-sm-2">
         <label for="formCategory">Category</label>
-        <select class="form-control input-sm" id="formCategory" ng-model="transaction.category" ng-options="category._id as category.name for category in projectCategories.data" required ng-required></select>
+        <select class="form-control input-sm" id="formCategory" ng-model="transaction.category" ng-options="category._id as category.name for category in theProject.categories" required ng-required></select>
       </div>
       <div class="form-group col-sm-3">
         <label for="formDescription">Description</label>
@@ -37,10 +37,10 @@
   <br />
   <table ng-table class="table table-striped table-bordered">
     <tr ng-repeat="tr in transactions">
-      <td data-title="'Amount'">{{tr.amount}}</td>
+      <td data-title="'Amount'">{{tr.amount|number:2 }} <i class="icon-{{ theProject.sortedAccounts[tr.account].currency.code.toLowerCase() }}"></i></td>
       <td data-title="'Type'"><span class="label" ng-class="{ 'bg-success': (tr.type == 2), 'bg-danger': (tr.type == 1) }">{{tr.type | transactionType}}</span></td>
-      <td data-title="'Account'">{{tr.account}}</td>
-      <td data-title="'Category'">{{ tr.category }}</td>
+      <td data-title="'Account'">{{ theProject.sortedAccounts[tr.account].name }}</td>
+      <td data-title="'Category'">{{ theProject.sortedCategories[tr.category].name }}</td>
       <td data-title="'Description'">{{tr.description}}</td>
       <td data-title="'Created'">{{tr.created | date:'yyyy-MM-dd HH:mm:ss' }}</td>
     </tr>

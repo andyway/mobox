@@ -38,13 +38,11 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
       ;             
   }])
 
-  .controller('root.index.account', ['$scope', 'userAccounts', function($scope, userAccounts) {
-    $scope.userAccounts = userAccounts;
-    console.log('root');
+  .controller('root.index.account', ['$scope', 'AccountFactory', function($scope, AccountFactory) {
+    $scope.AccountFactory = AccountFactory;
   }])
   
-  .controller('root.index.account.edit', ['$scope', '$state', '$stateParams', 'Account', 'Currency', function($scope, $state, $stateParams, Account, Currency) {
-    console.log('edit', $stateParams);
+  .controller('root.index.account.edit', ['$scope', '$state', '$stateParams', 'Account', 'Currency', 'AccountFactory', function($scope, $state, $stateParams, Account, Currency, AccountFactory) {
     $scope.account = { };
     $scope.currencies = Currency.list();
     
@@ -69,6 +67,7 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     }
     
     var success = function(data) {
+      AccountFactory.userAccounts = Account.list();
       $state.go('^');
     }
     
@@ -89,35 +88,39 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
       access = access || $scope.access;
       
       $scope.account.$addAccess({ access: access, username: username }, null, function(data) {
-        if (data.status == '404') {
-          $scope.error = true;
-        }
+        $scope.error = true;
       });  
     }
     
     $scope.remove = function(username) {
       $scope.account.$removeAccess({ id: $scope.account._id, username: username }, null, function(data) {
-        if (data.status == '404') {
-          $scope.error = true;
-        }
+        $scope.error = true;
       });  
     }
   }])
   
-  .controller('root.index.account.list', ['$rootScope', '$scope', '$state', 'Account', 'userAccounts', function($rootScope, $scope, $state, Account, userAccounts) {
-    console.log('list');
-    userAccounts.data = Account.list();
-    $scope.accounts = userAccounts.data;
+  .controller('root.index.account.list', ['$rootScope', '$scope', '$state', 'Account', 'AccountFactory', function($rootScope, $scope, $state, Account, AccountFactory) {
+    $scope.AccountFactory = AccountFactory;
  }])
 
-  .controller('account.sidebar', ['$scope', 'userAccounts', function($scope, userAccounts) {
-    console.log('sidebar');
-    $scope.userAccounts = userAccounts;
+  .controller('account.sidebar', ['$scope', 'AccountFactory', function($scope, AccountFactory) {
+    $scope.AccountFactory = AccountFactory;
   }])
 
-  .controller('project.account.list', ['$scope', '$state', 'theProject', 'projectAccounts', 'Account', function($scope, $state, theProject, projectAccounts, Account) {
-    projectAccounts.data = Account.list();
-    $scope.accounts = projectAccounts.data;
+  .controller('project.account.list', ['$scope', '$state', 'theProject', 'AccountFactory', 'Account', function($scope, $state, theProject, AccountFactory, Account) {
+    theProject.$then(function() {
+      AccountFactory.projectAccounts = Account.list(null, function(data) {
+        theProject.sortedAccounts = {};
+        
+        for (var i=0;i<data.length;i++) {
+          theProject.sortedAccounts[data[i]._id] = data[i];
+        }
+        
+      });
+    });
+    $scope.AccountFactory = AccountFactory;
+    theProject.accounts = AccountFactory.projectAccounts;
+    
   }])
   
   .factory('Account', function($resource){
@@ -137,12 +140,11 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     });
   })
   
-  .factory('userAccounts', function(){
-    return { data: null };
-  })
-
-  .factory('projectAccounts', function(){
-    return { data: null };
+  .factory('AccountFactory', function(){
+    return { 
+      userAccounts: {} , 
+      projectAccounts: {}
+    };
   })
   
 ;

@@ -7,9 +7,12 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
     
   }])
 
-  .controller('project.category.list', ['$scope', '$state', 'theProject', 'Category', 'projectCategories', function($scope, $state, theProject, Category, projectCategories) {
+  .controller('project.category.list', ['$scope', '$state', 'theProject', 'Category', function($scope, $state, theProject, Category) {
     $scope.isBeingSorted = false;
-    updateCategoryTree();
+    
+    theProject.$then(function() {
+      updateCategoryTree();
+    });
     
     $scope.submit = function(category) {
       if (!category) {
@@ -40,11 +43,12 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
     
     $scope.finishSorting = function() {
       $scope.isBeingSorted = false;
-      console.log($scope.nestable);
-      Category.sort({ projectID: theProject._id, categories: $scope.nestable });
+      Category.sort({ projectID: theProject._id, categories: $scope.nestable }, function(categories) {
+        updateSortedCategories(categories)
+      });
     }
     
-    function updateCategoryTree() {
+    function updateCategoryTree() { 
       Category.list({ projectID: theProject._id }, null, function(categories) {
         var cats = {};
         
@@ -57,9 +61,19 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
           cats[parent].push(categories[i]);
         }
 
-        projectCategories.data = categories;
+        theProject.categories = categories;
+        updateSortedCategories(categories);
+        
         $scope.categories = cats;
       });
+    }
+    
+    function updateSortedCategories(categories) {
+      theProject.sortedCategories = {};
+      for (var i=0;i<categories.length;i++) {
+        theProject.sortedCategories[categories[i]._id] = categories[i];
+      }
+      
     }
   }])
 
@@ -73,8 +87,4 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
     });
   })
   
-  .factory('projectCategories', function(){
-    return { data: null };
-  })
-
 ;

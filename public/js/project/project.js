@@ -6,11 +6,21 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
     
     $stateProvider
       .state('root.index.projects', {
-        url: '',
+        url: '/:action',
         views: {
           projects: {
             templateUrl: 'views/project/root.index.list.html',
             controller: 'root.index.project.list', 
+          },
+        }      
+      })
+
+      .state('root.index.projects-edit', {
+        url: '/project-edit',
+        views: {
+          'projects@root': {
+            template: ' ',
+            controller: 'root.index.project.reload', 
           },
         }      
       })
@@ -27,11 +37,15 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
       })
       */                                                                                 
 
-      .state('project', {
+      .state('root.project', {
         abstract: true,
         url: '/project/:projectID',
-        templateUrl: 'views/project/view.html',
-        controller: 'project.view',
+        views: {
+          '@': {
+            templateUrl: 'views/project/view.html',
+            controller: 'root.project.view',
+          },
+        },      
         resolve:{
           theProject:  function($stateParams, Project) {
             return Project.get({ id: $stateParams.projectID });
@@ -39,7 +53,7 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
         }
       })
 
-      .state('project.view', {
+      .state('root.project.view', {
         url: '',
         views: {
           categories: {
@@ -64,24 +78,17 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
       ;                                                                               
   }])
 
-  .controller('project.view', ['$scope', '$state', '$stateParams', 'Project', 'theProject', function($scope, $state, $stateParams, Project, theProject) {
-    $scope.showACL = false;
-    
+  .controller('root.project.view', ['$scope', '$state', '$stateParams', 'Project', 'theProject', function($scope, $state, $stateParams, Project, theProject) {
     $scope.project = theProject;
-    if ($scope.project._acl && typeof($scope.project._acl) == 'string') {
-      $scope.project.access = $scope.project._acl;
-      delete ($scope.project._acl);
-    }
-    
-    if ($scope.project._acl) {
-      $scope.showACL = true;
-    }
-    
-    $state.go('project.view');
+
+    $state.go('root.project.view');
   }])
   
-  .controller('root.index.project', ['$scope', 'userProjects', function($scope, userProjects) {
-    $scope.userProjects = userProjects;
+  .controller('root.index.project', ['$scope', 'ProjectFactory', function($scope, ProjectFactory) {
+  }])
+  
+  .controller('root.index.project.reload', ['$scope', '$state', function($scope, $state) {
+    $state.go('root.index.projects', { action: 'add' });
   }])
   
   .controller('project.access.list', ['$scope', '$state', 'theProject', function($scope, $state, theProject) {
@@ -108,42 +115,8 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
     }
   }])
   
-  /*
-  .controller('root.index.project.edit', ['$scope', '$state', '$stateParams', 'Project', function($scope, $state, $stateParams, Project) {
-    console.log('edit', $stateParams);
-    $scope.project = { };
-    
-    if ($stateParams.projectID) {
-      $scope.project = Project.get({id: $stateParams.projectID});
-    }
-
-    $scope.submit = function() {
-      if ($scope.project._id) {
-        Project.update($scope.project, success);
-      }
-      else {
-        Project.create($scope.project, success);
-      }
-      
-    }
-    
-    $scope.remove = function() {
-      if ($scope.project._id) {
-        Project.remove({ id: $scope.project._id }, success);
-      }
-    }
-    
-    var success = function(data) {
-      $state.go('^');
-    }
-    
-  }])
-  */
-  
-  .controller('root.index.project.list', ['$rootScope', '$scope', '$state', 'Project', 'userProjects', function($rootScope, $scope, $state, Project, userProjects) {
-    console.log('list');
-    userProjects.data = Project.list();
-    $scope.projects = userProjects.data;
+  .controller('root.index.project.list', ['$scope', '$state', 'Project', 'ProjectFactory', function($scope, $state, Project, ProjectFactory) {
+    $scope.ProjectFactory = ProjectFactory;
     
     $scope.isBeingEdited = function(project) {
       if (!project && $scope.editableProject && !$scope.editableProject._id) return true;
@@ -183,15 +156,18 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
     }
     
     var success = function(data) {
-      userProjects.data = Project.list();
-      $scope.projects = userProjects.data;
+      ProjectFactory.userProjects = Project.list();
       $scope.view();
+    }
+    
+    if ($state.params.action && $state.params.action != '') {
+      $scope.edit();
     }
     
   }])
 
-  .controller('project.sidebar', ['$scope', 'currentUser', 'userProjects', function($scope, currentUser, userProjects) {
-    $scope.userProjects = userProjects;
+  .controller('project.sidebar', ['$scope', 'currentUser', 'ProjectFactory', function($scope, currentUser, ProjectFactory) {
+    $scope.ProjectFactory = ProjectFactory;
   }])
 
   .factory('Project', function($resource){
@@ -205,8 +181,10 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
     });
   })
   
-  .factory('userProjects', function(){
-    return { data: null };
+  .factory('ProjectFactory', function(){
+    return { 
+      userProjects: []
+    };
   })
 
 ;

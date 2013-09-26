@@ -23,4 +23,19 @@
   button { display: none }
 }
 
-
+/**
+* Read/Write/Owner symbols
+*/
+header { position: relative; }
+.ng-access-triangle { position: absolute; top: 0; left: 0; opacity: 1; width: 0; height: 0; border: 12px solid red; border-color: red transparent transparent red; background: transparent none !important;
+  label { background: transparent none !important; position: relative; left: -12px; top: -16px;  
+    i { background: transparent none !important; color: #fff; font-size: 10px; }
+  }
+  
+  &.access-Owner { border-color: #FB6B5B transparent transparent #FB6B5B; }  
+  &.access-Read { border-color: #24BEEF transparent transparent #24BEEF; }  
+  &.access-Write { border-color: #92CF5C transparent transparent #92CF5C; }  
+}
+.article-item { position: relative;
+  .ng-access-triangle { left: -15px; top: -10px; }
+}

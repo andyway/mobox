@@ -7,10 +7,16 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
     
   }])
 
-  .controller('project.transaction.list', ['$scope', '$state', 'theProject', 'projectAccounts', 'projectCategories', 'Transaction', function($scope, $state, theProject, projectAccounts, projectCategories, Transaction) {
-    $scope.projectAccounts = projectAccounts;
-    $scope.projectCategories = projectCategories;
-    $scope.transactions = Transaction.list({ projectID: theProject._id });
+  .controller('project.transaction.list', ['$scope', '$state', 'theProject', 'AccountFactory', 'Transaction', function($scope, $state, theProject, AccountFactory, Transaction) {
+    $scope.AccountFactory = AccountFactory;
+    $scope.theProject = theProject;
+    
+    $scope.transaction = { type: 1 };
+    
+    theProject.$then(function() {
+      $scope.transactions = Transaction.list({ projectID: theProject._id });
+    });
+    
         
     $scope.submit = function(transaction) {
       $scope.error = false;
@@ -25,13 +31,13 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
       else {
         transaction.$create({ projectID: theProject._id }, function() {
           $scope.transactions.unshift(transaction);
-        }, function() {
-          $scope.error = true;
+          $scope.transaction = null;
+        }, function(data) {
+          $scope.error = data.data;
         });
         
       }
       
-      $scope.transaction = null;
     }
     
   }])

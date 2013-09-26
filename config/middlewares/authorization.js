@@ -15,7 +15,7 @@ exports.project = {
   
   requireOwnership: function(req, res, next) {
     if (!req.isProjectOwner) {
-      return res.send(403, 'Access denied');
+      return res.send(403, 'Access denied - Project Ownership is required');
     }
     next();
   },
@@ -23,13 +23,13 @@ exports.project = {
   requireReadAccess: function(req, res, next) {
     if (req.isProjectOwner) return next();
     if (req.project.getAccess(req.user)) return next();
-    return res.send(403, 'Access denied');
+    return res.send(403, 'Access denied - Project Read Access is required');
   },
   
   requireWriteAccess: function(req, res, next) {
     if (req.isProjectOwner) return next();
     if (req.project.getAccess(req.user) == 'Write') return next();
-    return res.send(403, 'Access denied');
+    return res.send(403, 'Access denied - Project Write Access is required');
   }
 
 };
@@ -44,7 +44,7 @@ exports.account = {
   
   requireOwnership: function(req, res, next) {
     if (!req.isAccountOwner) {
-      return res.send(403, 'Access denied');
+      return res.send(403, 'Access denied - Account Ownership is required');
     }
     next();
   },
@@ -52,13 +52,13 @@ exports.account = {
   requireReadAccess: function(req, res, next) {
     if (req.isAccountOwner) return next();
     if (req.account.getAccess(req.user)) return next();
-    return res.send(403, 'Access denied');
+    return res.send(403, 'Access denied - Account Read Access is required');
   },
   
   requireWriteAccess: function(req, res, next) {
     if (req.isAccountOwner) return next();
     if (req.account.getAccess(req.user) == 'Write') return next();
-    return res.send(403, 'Access denied');
+    return res.send(403, 'Access denied - Account Write Access is required');
   }
 
 };

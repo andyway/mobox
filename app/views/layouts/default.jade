@@ -3,8 +3,11 @@ html(lang='en', xmlns='http://www.w3.org/1999/xhtml', xmlns:fb='https://www.face
   include ../includes/head
   body
     section.hbox.stretch
-      block sidebar
-      block content
+      section#content
+        section.vbox
+          
+          block sidebar
+          block content
     
     div(data-ng-view)
     include ../includes/foot

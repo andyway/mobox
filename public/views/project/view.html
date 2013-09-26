@@ -1,48 +1,36 @@
-<section class="vbox">
-  <header class="header bg-light dker bg-gradient"><p>Project: {{ project.name }}</p></header>
-  <section class="">
-    <div class="slim-scroll wrapper" data-height="auto" data-disable-fade-out="true" data-distance="0">
-      <div class="row">
-        <div class="col-sm-3">
+<div class="col-sm-3">
 
-          <section class="panel">
-            <div ui-view="categories"></div>
-          </section>    
+  <section class="panel">
+    <div ui-view="categories"></div>
+  </section>    
 
-          <section class="panel">
-            <header class="panel-heading bg-info lter no-borders">
-              <i class="icon-sun icon-1x pull-left border m-r"></i>
-              <div class="clearfix h4 font-thin">Accounts</div>
-            </header>
-            
-            <div ui-view="accounts"></div>
-          </section>    
-                                              
-          <section class="panel" ng-show="showACL">
-            <header class="panel-heading bg-info lter no-borders">
-              <i class="icon-sun icon-1x pull-left border m-r"></i>
-              <div class="clearfix h4 font-thin">Users</div>
-            </header>
-            
-            <div ui-view="access"></div>
-          </section>    
+  <section class="panel">
+    <header class="panel-heading bg-info lter no-borders">
+      <div class="clearfix h5 font-thin"><i class="icon-usd icon-1x"></i> Accounts</div>
+    </header>
+    
+    <div ui-view="accounts"></div>
+  </section>    
+                                      
+  <section class="panel" ng-if="project.access == 'Owner'">
+    <header class="panel-heading bg-info lter no-borders">
+      
+      <div class="clearfix h5 font-thin"><i class="icon-user icon-1x"></i> Users</div>
+    </header>
+    
+    <div ui-view="access"></div>
+  </section>    
 
-        </div>
+</div>
 
-        <div class="col-sm-9">
-          <section class="panel">
-            <header class="panel-heading bg-primary lter no-borders">
-              <i class="icon-sun icon-1x pull-left border m-r"></i>
-              <div class="clearfix h4 font-thin">Transactions</div>
-            </header>
-            
-            <div ui-view="transactions"></div>
-          </section>
-              
-        </div>
-      </div>
-    </div>
+<div class="col-sm-9">
+  <section class="panel">
+    <header class="panel-heading bg-primary lter no-borders">
+      <div class="clearfix h3 font-thin"><i class="icon-th-list icon-1x"></i> Transactions / {{ project.name }}</div>
+    </header>
+    
+    <div ui-view="transactions"></div>
   </section>
-</section>
-
-{{ project }}
+      
+</div>
+</div>

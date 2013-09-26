@@ -1,9 +1,8 @@
 <header class="panel-heading bg-info lter no-borders">
-  <i class="icon-sun icon-1x pull-left border m-r"></i>
   <div class="clearfix">
-    <span class="h4 font-thin">Categories</span>
-    <a href="" ng-show="!isBeingSorted" class="pull-right" ng-click="isBeingSorted = !isBeingSorted">Sort</a>
-    <a href="" ng-show="isBeingSorted" class="pull-right text-danger" ng-click="finishSorting()">Finish sorting</a>
+    <span class="h5 font-thin"><i class="icon-map-marker icon-1x"></i> Categories</span>
+    <a href="" ng-if="project.access == 'Owner'" ng-show="!isBeingSorted" class="pull-right" ng-click="isBeingSorted = !isBeingSorted">Sort</a>
+    <a href="" ng-if="project.access == 'Owner'" ng-show="isBeingSorted" class="pull-right text-danger" ng-click="finishSorting()">Finish sorting</a>
   </div>
 </header>
             
@@ -12,7 +11,7 @@
     <li class="list-group-item dd-item" ng-repeat="cat in categories.root" data-id="{{ cat._id }}" ng-include="'project.category.list.branch'"></li>
   </ol>
 </div>
-<form role="form" class="col-sm-12" ng-submit="submit()">
+<form role="form" class="col-sm-12" ng-submit="submit()" ng-if="project.access == 'Owner'">
   <div class="form-group">
     <input type="text" class="form-control input-sm" placeholder="Create Category" ng-model="category.name" required>
   </div>
@@ -24,7 +23,7 @@
 </form>
 
 <script type="text/ng-template"  id="project.category.list.branch">
-  <span class="dropdown pull-right">
+  <span class="dropdown pull-right" ng-if="project.access == 'Owner'">
     <a class="badge dropdown-toggle" ng-class="bg-default">Edit</a>
     <ul class="dropdown-menu">
       <li><a href="" ng-click="edit(cat)"><i class="icon-pencil"></i> Edit</a></li>
