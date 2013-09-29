@@ -28,24 +28,24 @@
     </div>
     <div class="list-group no-radius alt" ng-hide="isBeingEdited(project)" style="height: 199px;">
       <a href="#" class="list-group-item"> 
-        <span class="badge bg-success">0</span> 
-        <i class="icon-comment icon-muted"></i> Transactions
+        <span class="badge bg-info">{{ project.statistics.count }}</span> 
+        <i class="icon-th-list icon-muted"></i> Transactions
       </a>
       <a href="#" class="list-group-item">
-        <span class="badge bg-info">0</span>
-        <i class="icon-envelope icon-muted"></i> Accounts
+        <span class="badge bg-info">{{ project.statistics.accounts }}</span>
+        <i class="icon-signal icon-muted"></i> Accounts
       </a>
       <a href="#" class="list-group-item">
-        <span class="badge bg-light">0</span>
-        <i class="icon-eye-open icon-muted"></i> Categories
+        <span class="badge bg-light" ng-class="{ 'bg-success': (project.statistics.sum > 0), 'bg-danger': (project.statistics.sum < 0) }">{{ project.statistics.sum }}</span>
+        <i class="icon-usd icon-muted"></i> Cash flow
       </a>
       <a href="#" class="list-group-item">
-        <span class="badge bg-light">0</span>
-        <i class="icon-time icon-muted"></i> Resources spent
+        <span class="badge bg-light">{{ project.statistics.categories }}</span>
+        <i class="icon-map-marker icon-muted"></i> Categories
       </a>
       <a href="#" class="list-group-item">
-        <span class="badge bg-light">0</span>
-        <i class="icon-time icon-muted"></i> Participants
+        <span class="badge bg-light"> {{ project._acl.length }}</span>
+        <i class="icon-user icon-muted"></i> Participants
       </a>
     </div>
     

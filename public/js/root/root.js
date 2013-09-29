@@ -94,4 +94,16 @@ angular.module('expence.root', ['ngResource', 'ui.router', 'ui.bootstrap'])
     };
   })
 
+  .directive('colorpicker', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, elm, attrs) {
+        var options = scope.$eval(attrs.colorpicker);
+        
+        elm.minicolors(options);
+        
+      }
+    };
+  })
+
   ;

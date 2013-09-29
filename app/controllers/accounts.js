@@ -62,7 +62,7 @@ exports.show = function(req, res) {
 };
 
 exports.all = function(req, res) {
-  Account.find({ $or: [ { user: req.user }, { _acl: { $elemMatch: { user: req.user } } } ] }).populate('currency').exec(function(err, accounts) {
+  Account.find({ $or: [ { user: req.user }, { _acl: { $elemMatch: { user: req.user } } } ] }).populate('currency').sort('-created').exec(function(err, accounts) {
     var i=0, len, result = [];
     if (err) {
       res.render('error', {

@@ -1,12 +1,20 @@
 <div class="list-group no-radius alt">
   <div class="list-group-item clearfix" ng-repeat="acc in AccountFactory.projectAccounts">
     <div ng-access-triangle="{ access: acc.access }"></div>
-    <div class="col-lg-6">
-      <span class="h2">{{ acc.balance|number:2 }}</span><i class="icon-{{ acc.currency.code.toLowerCase() }}"></i>
+    <div class="col-lg-4">
+      <span class="h4">{{ acc.balance|number:2 }}</span><i class="icon-{{ acc.currency.code.toLowerCase() }}"></i>
     </div>
-    <div class="col-lg-6">                        
-      <div class="font-semibold">{{ acc.name }}</div>
-      <div class="text-xs block m-t-xs"><i class="icon-list"></i> {{ acc.description }}</div>
-    </div>
+    <span class="font-semibold">{{ acc.name }}</span>
+    <span class="pull-right badges">
+      <!--span class="badge sum" ng-class="{ 'bg-success': (acc.statistics.sum > 0), 'bg-danger': (acc.statistics.sum < 0) }"><i class="icon-{{ acc.currency.code.toLowerCase() }}"></i> {{ acc.statistics.sum }} </span>
+      <span class="badge bg-info count"><i class="icon-th-list"></i> {{ acc.statistics.count }} </span-->
+      <span class="sum"><i class="icon-{{ acc.currency.code.toLowerCase() }}"></i> {{ acc.statistics.sum }} </span>
+      <span class="count"><i class="icon-th-list"></i> {{ acc.statistics.count }} </span>
+      
+      <span class="filter-icons">
+        <i class="icon-check-empty" ng-show="project.filters.accounts.indexOf(acc._id) < 0" ng-click="toggleFilter(acc)"></i>
+        <i class="icon-check" ng-show="project.filters.accounts.indexOf(acc._id) > -1" ng-click="toggleFilter(acc)"></i>
+      </span>
+    </span> 
   </div>
 </div>

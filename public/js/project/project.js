@@ -78,10 +78,27 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
       ;                                                                               
   }])
 
-  .controller('root.project.view', ['$scope', '$state', '$stateParams', 'Project', 'theProject', function($scope, $state, $stateParams, Project, theProject) {
+  .controller('root.project.view', ['$scope', '$state', '$stateParams', 'Project', 'theProject', 'currentUser', function($scope, $state, $stateParams, Project, theProject, currentUser) {
     $scope.project = theProject;
+    
+    theProject.$then(function() {
+      theProject.sortedUsers = {};
+      theProject.sortedUsers[currentUser._id] = 'You';
 
-    $state.go('root.project.view');
+      theProject.filters = { 
+        categories: [],
+        accounts: [],
+        users: []
+      };
+      
+      if (typeof(theProject._acl) == 'object') {
+        for (var i=0;i<theProject._acl.length;i++) {
+          theProject.sortedUsers[theProject._acl[i]._id] = theProject._acl[i].username;
+        }
+      }
+      $state.go('root.project.view');
+    });
+    
   }])
   
   .controller('root.index.project', ['$scope', 'ProjectFactory', function($scope, ProjectFactory) {

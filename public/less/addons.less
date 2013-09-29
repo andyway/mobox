@@ -2,7 +2,7 @@
   .dd-item {
     button { display: none; }
     .dd-handle { cursor: url(https://mail.google.com/mail/images/2/openhand.cur); cursor:hand; cursor:grab; cursor:-moz-grab; cursor:-webkit-grab; } 
-    .dd-list { padding: 10px 0 0 0; margin: 0; }
+    .dd-list { padding: 3px 0 0 0; margin: 0; }
   }
 
 .dd-placeholder,
@@ -38,4 +38,62 @@ header { position: relative; }
 }
 .article-item { position: relative;
   .ng-access-triangle { left: -15px; top: -10px; }
+}
+
+/** 
+* Colorpicker directive
+*/
+.minicolors.minicolors-theme-default {
+  input.minicolors-input { display: none; }
+  .minicolors-swatch { position: static; width: 15px; height: 15px; cursor: pointer; }
+}
+
+/**
+* Chosen
+*/
+
+.chosen-container .chosen-choices { border-color: #D8DDE5; border-radius: 3px; background: none; padding-bottom: 1px;
+  li.search-field input[type="text"] { box-sizing: content-box; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; 
+    font-size: 12px; font-family: inherit; line-height: 1.5; color: #aaa;
+  }
+}
+
+/**
+* Categories view
+*/
+
+[ui-view='categories'] {
+  li { padding: 3px 0 3px 15px; line-height: 20px; border: none; 
+    .bg-color { display: block; float: left; height: 20px; width: 5px; margin-right: 5px; }
+    .edit { opacity: 0.1; }
+    
+    .edit:hover { opacity: 1; }
+    
+    .badges { margin-right: 15px; }
+    .filter-icons { width: 15px; display: inline-block; cursor: pointer; }
+  }
+}
+
+[ui-view='accounts'] {
+  .filter-icons { width: 15px; display: inline-block; cursor: pointer; }
+}
+
+/**
+* Transactions view
+*/
+#ui-view-transaction {
+  .list-group-item {
+    .amount { 
+      &.positive { color: #308F4F; 
+        .h3:before { content: '+'; }
+      }
+      &.negative { color: #8F3030; 
+        .h3:before { content: '-'; }
+      }
+    }
+    
+    .edit { opacity: 0.2; cursor: pointer;
+      &:hover { opacity: 1; }
+    }
+  }
 }

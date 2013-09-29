@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
   async = require('async'),
   Transaction = mongoose.model('Transaction'),
   Account = mongoose.model('Account'),
+  Category = mongoose.model('Category'),
   _ = require('underscore');
 
 exports.transaction = function(req, res, next, id) {
@@ -16,20 +17,16 @@ exports.transaction = function(req, res, next, id) {
 };
 
 exports.create = function(req, res, next) {
-  var transaction = new Transaction(req.body);
+  var transaction = new Transaction(req.body), isNewTransactionForAccount = false;
   transaction.created_by = req.user;
   transaction.project = req.project;
 
   transaction.save(function(err, transaction) {
     if (err) return res.send(500, err.message);
     
-    if (transaction.type == 1) {
-      req.account.balance -= transaction.amount;
-    }
-    if (transaction.type == 2) {
-      req.account.balance += transaction.amount;
-    }
-    req.account.save();
+    isNewTransactionForAccount = req.account.updateProjectStatistics(transaction.project, transaction.sum, 1);
+    req.project.updateStatistics(transaction.sum, 1, isNewTransactionForAccount);
+    Category.updateStatistics(transaction.categories, transaction.sum, 1);
     
     res.jsonp(transaction);
   });
@@ -38,9 +35,20 @@ exports.create = function(req, res, next) {
 exports.update = function(req, res) {
   var transaction = req.transaction;
 
+  req.account.updateProjectStatistics(transaction.project, -transaction.sum, -1);
+  req.project.updateStatistics(-transaction.sum, -1, false);
+  Category.updateStatistics(transaction.categories, -transaction.sum, -1);
+  
   transaction = _.extend(transaction, req.body);
-
+  transaction.project = req.project;
+  
   transaction.save(function(err) {
+    if (err) return res.send(500, err.message);
+    
+    isNewTransactionForAccount = req.account.updateProjectStatistics(transaction.project, transaction.sum, 1);
+    req.project.updateStatistics(transaction.sum, 1, isNewTransactionForAccount);
+    Category.updateStatistics(transaction.categories, transaction.sum, 1);
+    
     res.jsonp(transaction);
   });
 };

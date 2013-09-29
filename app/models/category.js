@@ -14,6 +14,11 @@ var CategorySchema = new Schema({
     default: '',
     trim: true
   },
+  color: {
+    type: String,
+    default: '',
+    trim: true
+  },
   project: {
     type: Schema.ObjectId,
     ref: 'Project',
@@ -23,10 +28,24 @@ var CategorySchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Category'
   },
+  statistics: {
+    sum: {
+      type: Number,
+      default: 0
+    },
+    count: {
+      type: Number,
+      default: 0
+    }
+  },
   weight: {
     type: Number,
     default: 0
   }
 });
+
+CategorySchema.statics.updateStatistics = function (categories, sum, count) {
+  this.update({ _id: { $in: categories } }, { $inc: { 'statistics.count': count, 'statistics.sum': sum } }, { multi: true }).exec();
+}
 
 mongoose.model('Category', CategorySchema);

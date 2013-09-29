@@ -9,6 +9,7 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
 
   .controller('project.category.list', ['$scope', '$state', 'theProject', 'Category', function($scope, $state, theProject, Category) {
     $scope.isBeingSorted = false;
+    $scope.category = { color: '#0088cc' };
     
     theProject.$then(function() {
       updateCategoryTree();
@@ -25,11 +26,12 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
         category.$update({ projectID: theProject._id });  
       }
       else {
+        console.log($scope.category);
         category.$create({ projectID: theProject._id });
         updateCategoryTree();
       }
       
-      $scope.category = null;
+      $scope.category = { color: '#0088cc' };
     }
     
     $scope.edit = function(cat) {
@@ -41,11 +43,26 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
       updateCategoryTree();  
     }
     
+    $scope.toggleFilter = function(category) {
+      var index = _.indexOf(theProject.filters.categories, category._id);
+      if (index > -1) {
+        theProject.filters.categories.splice(index, 1);
+      }
+      else {
+        theProject.filters.categories.push(category._id);
+      }
+      
+    }
+    
     $scope.finishSorting = function() {
       $scope.isBeingSorted = false;
       Category.sort({ projectID: theProject._id, categories: $scope.nestable }, function(categories) {
         updateSortedCategories(categories)
       });
+    }
+    
+    $scope.startSorting = function() {
+      $scope.isBeingSorted = true;
     }
     
     function updateCategoryTree() { 
@@ -75,6 +92,7 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
       }
       
     }
+  
   }])
 
   .factory('Category', function($resource){

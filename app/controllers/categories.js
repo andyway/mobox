@@ -21,6 +21,10 @@ exports.create = function(req, res, next) {
 
   category.save(function(err) {
     if (err) return next(err);
+    
+    req.project.statistics.categories++;
+    req.project.save();
+    
     res.jsonp(category);
   });
 };
@@ -41,6 +45,10 @@ exports.destroy = function(req, res) {
 
   category.remove(function(err) {
     if (err) return res.render('error', { status: 500 });
+    
+    req.project.statistics.categories--;
+    req.project.save();
+    
     res.jsonp(category);
   });
 };

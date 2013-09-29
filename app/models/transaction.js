@@ -37,15 +37,24 @@ var TransactionSchema = new Schema({
     ref: 'Project',
     required: true
   },
-  category: {
+  categories: [{
     type: Schema.ObjectId,
     ref: 'Category'
-  },
+  }],
   created: {
     type: Date,
     default: Date.now,
     required: true
   }
+},
+{
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
 });
+
+TransactionSchema.virtual('sum').get(function () {
+  return ((this.type == 2)?this.amount:-this.amount);
+});
+
 
 mongoose.model('Transaction', TransactionSchema);

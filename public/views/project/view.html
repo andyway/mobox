@@ -1,12 +1,18 @@
 <div class="col-sm-3">
 
   <section class="panel">
+    <header class="panel-heading bg-info lter no-borders">
+      <div class="clearfix">
+        <span class="h5 font-thin"><i class="icon-map-marker"></i> Categories</span>
+      </div>
+    </header>
+            
     <div ui-view="categories"></div>
   </section>    
 
   <section class="panel">
     <header class="panel-heading bg-info lter no-borders">
-      <div class="clearfix h5 font-thin"><i class="icon-usd icon-1x"></i> Accounts</div>
+      <div class="clearfix h5 font-thin"><i class="icon-signal"></i> Accounts</div>
     </header>
     
     <div ui-view="accounts"></div>
@@ -15,7 +21,7 @@
   <section class="panel" ng-if="project.access == 'Owner'">
     <header class="panel-heading bg-info lter no-borders">
       
-      <div class="clearfix h5 font-thin"><i class="icon-user icon-1x"></i> Users</div>
+      <div class="clearfix h5 font-thin"><i class="icon-user"></i> Users</div>
     </header>
     
     <div ui-view="access"></div>
@@ -26,7 +32,7 @@
 <div class="col-sm-9">
   <section class="panel">
     <header class="panel-heading bg-primary lter no-borders">
-      <div class="clearfix h3 font-thin"><i class="icon-th-list icon-1x"></i> Transactions / {{ project.name }}</div>
+      <div class="clearfix h3 font-thin"><i class="icon-th-list"></i> Transactions / {{ project.name }}</div>
     </header>
     
     <div ui-view="transactions"></div>

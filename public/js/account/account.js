@@ -113,6 +113,16 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
         theProject.sortedAccounts = {};
         
         for (var i=0;i<data.length;i++) {
+          
+          if (data[i].statistics) {
+            for (var j=0;j<data[i].statistics.length;j++) {
+              if (data[i].statistics[j].project == theProject._id.toString()) {
+                data[i].statistics = data[i].statistics[j];
+                break;
+              }  
+            }
+          }
+          
           theProject.sortedAccounts[data[i]._id] = data[i];
         }
         
@@ -120,6 +130,16 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     });
     $scope.AccountFactory = AccountFactory;
     theProject.accounts = AccountFactory.projectAccounts;
+    
+    $scope.toggleFilter = function(account) {
+      var index = _.indexOf(theProject.filters.accounts, account._id);
+      if (index > -1) {
+        theProject.filters.accounts.splice(index, 1);
+      }
+      else {
+        theProject.filters.accounts.push(account._id);
+      }
+    }
     
   }])
   
