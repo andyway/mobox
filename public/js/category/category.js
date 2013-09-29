@@ -13,6 +13,11 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
     
     theProject.$then(function() {
       updateCategoryTree();
+
+      $scope.$watch('project.transactionWatch', function() {
+        updateCategoryTree();
+      });
+    
     });
     
     $scope.submit = function(category) {

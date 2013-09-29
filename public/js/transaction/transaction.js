@@ -15,6 +15,7 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
     theProject.$then(function() {
       $scope.transactions = Transaction.list({ projectID: theProject._id });
       $scope.transactions.$then($scope.paginate);
+      
     });
     
         
@@ -28,12 +29,14 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
       if (transaction._id) {
         transaction.$update({ projectID: theProject._id });  
         $scope.reset();
+        theProject.transactionWatch++;
       }
       else {
         transaction.$create({ projectID: theProject._id }, function() {
           $scope.transactions.unshift(transaction);
           $scope.paginate();
           $scope.reset();
+          theProject.transactionWatch++;
         }, function(data) {
           $scope.error = data.data;
         });

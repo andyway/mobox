@@ -109,7 +109,31 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
 
   .controller('project.account.list', ['$scope', '$state', 'theProject', 'AccountFactory', 'Account', function($scope, $state, theProject, AccountFactory, Account) {
     theProject.$then(function() {
-      AccountFactory.projectAccounts = Account.list(null, function(data) {
+      $scope.initAccounts();
+      
+      $scope.$watch('project.transactionWatch', function() {
+        $scope.initAccounts();
+      });
+    });
+    
+    
+
+    $scope.AccountFactory = AccountFactory;
+    theProject.accounts = AccountFactory.projectAccounts;
+    
+    $scope.toggleFilter = function(account) {
+      var index = _.indexOf(theProject.filters.accounts, account._id);
+      if (index > -1) {
+        theProject.filters.accounts.splice(index, 1);
+      }
+      else {
+        theProject.filters.accounts.push(account._id);
+      }
+    }
+    
+    $scope.initAccounts = function() {
+      Account.list(null, function(data) {
+        AccountFactory.projectAccounts = data;
         theProject.sortedAccounts = {};
         
         for (var i=0;i<data.length;i++) {
@@ -127,18 +151,6 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
         }
         
       });
-    });
-    $scope.AccountFactory = AccountFactory;
-    theProject.accounts = AccountFactory.projectAccounts;
-    
-    $scope.toggleFilter = function(account) {
-      var index = _.indexOf(theProject.filters.accounts, account._id);
-      if (index > -1) {
-        theProject.filters.accounts.splice(index, 1);
-      }
-      else {
-        theProject.filters.accounts.push(account._id);
-      }
     }
     
   }])

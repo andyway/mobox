@@ -48,7 +48,8 @@ angular.module('expence.user', ['ngResource', 'ngCookies', 'ui.router', 'expence
           $scope.error = false;
           
           angular.extend(currentUser, data);
-          $state.go('root');
+          location.href = '/';
+          //$state.go('root.index');
         }, 
         function(data) {
           $scope.error = true;
@@ -83,7 +84,8 @@ angular.module('expence.user', ['ngResource', 'ngCookies', 'ui.router', 'expence
 
           if ($scope.timeToRedirect < 1) {
             clearInterval(interval);
-            $state.go('root');
+            location.href = '/';
+            //$state.go('root.index');
           }
           $scope.$apply();
         }, 1000);

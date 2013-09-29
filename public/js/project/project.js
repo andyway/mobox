@@ -84,7 +84,8 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
     theProject.$then(function() {
       theProject.sortedUsers = {};
       theProject.sortedUsers[currentUser._id] = 'You';
-
+      theProject.transactionWatch = 0;
+      
       theProject.filters = { 
         categories: [],
         accounts: [],
