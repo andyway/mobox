@@ -111,8 +111,10 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     theProject.$then(function() {
       $scope.initAccounts();
       
-      $scope.$watch('project.transactionWatch', function() {
-        $scope.initAccounts();
+      $scope.$watch('project.transactionWatch', function(val) {
+        if (theProject.transactionWatch && theProject.transactionWatch > 0) {
+          $scope.initAccounts();
+        }
       });
     });
     

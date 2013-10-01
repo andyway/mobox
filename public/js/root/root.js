@@ -35,18 +35,21 @@ angular.module('expence.root', ['ngResource', 'ui.router', 'ui.bootstrap'])
       $urlRouterProvider.when('', '/dashboard');             
   }])
   
-  .run(['AccountFactory', 'ProjectFactory', 'Account', 'Project', function(AccountFactory, ProjectFactory, Account, Project) {
-    AccountFactory.userAccounts = Account.list();
-    ProjectFactory.userProjects = Project.list();
-
+  .run(['$location', 'AccountFactory', 'ProjectFactory', 'Account', 'Project', function($location, AccountFactory, ProjectFactory, Account, Project) {
+    if ($location.$$url.indexOf('/project/') == 0) {
+      AccountFactory.userAccounts = Account.list();
+      ProjectFactory.userProjects = Project.list();
+    }
   }])
   
-  .controller('root', ['$scope', '$state', '$stateParams', 'currentUser', 'AccountFactory', 'ProjectFactory', function($scope, $state, $stateParams, currentUser, AccountFactory, ProjectFactory) {
+  .controller('root', ['$scope', '$state', '$stateParams', 'currentUser', 'AccountFactory', 'ProjectFactory', 'Account', 'Project', function($scope, $state, $stateParams, currentUser, AccountFactory, ProjectFactory, Account, Project) {
     $scope.currentUser = currentUser;
     
     $scope.AccountFactory = AccountFactory.userAccounts;
-
     $scope.ProjectFactory = ProjectFactory.userProjects;
+                                             
+    AccountFactory.userAccounts = Account.list();
+    ProjectFactory.userProjects = Project.list();
 
     $scope.$state = $state;
     $state.go('root.index');

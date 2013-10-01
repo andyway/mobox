@@ -113,7 +113,9 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
     });
     
     $scope.$watch('theProject.filters', function(){
-      $scope.paginate();
+      if (typeof(theProject.filters) == 'object') {
+        $scope.paginate();
+      }
     }, true);
     
   }])
