@@ -47,6 +47,35 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
       
     }
     
+    $scope.batch = function() {
+      var i=0, min = 10, max = 1000,
+      count = parseInt($scope.transaction.description);
+      create();
+      
+      function create() {
+        var transaction = new Transaction($scope.transaction);
+        
+        transaction.amount = (Math.random() * (max - min + 1)) + min; 
+        transaction.type = Math.floor(Math.random() * (2 - 1 + 1)) + 1;
+        transaction.account = theProject.accounts[Math.floor(Math.random()*theProject.accounts.length)]._id; 
+        transaction.category = theProject.categories[Math.floor(Math.random()*theProject.categories.length)]._id; 
+        
+        transaction.$create({ projectID: theProject._id }, function() {
+          $scope.transactions.unshift(transaction);
+          $scope.paginate();
+          theProject.transactionWatch++;
+          
+          i++;
+          if (i >= count) {
+            
+          }
+          else {
+            create();
+          }
+        });
+      }
+    }
+    
     $scope.remove = function(transaction) {
       transaction.$remove({ projectID: theProject._id, id: transaction._id }, function() {
         var i=0, len = $scope.transactions.length;
