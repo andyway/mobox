@@ -19,6 +19,7 @@
     <a href="" ng-if="project.access == 'Owner'" ng-show="isBeingSorted" class="btn btn-danger btn-sm pull-right" ng-click="finishSorting()">Finish sorting</a>
   </div>
 </form>
+<a   ng-click="categories = ''">asdf</a> {{ categories }}
 
 <script type="text/ng-template"  id="project.category.list.branch">
   <a href="" class="edit" ng-click="edit(cat)"><i class="icon-pencil" ng-if="project.access == 'Owner'" ng-show="!isBeingSorted"></i></a>
@@ -27,9 +28,7 @@
   {{ cat.name }}
   
   <span class="pull-right badges">               
-    <!--span class="badge sum" ng-class="{ 'bg-success': (cat.statistics.sum > 0), 'bg-danger': (cat.statistics.sum < 0) }"><i class="icon-usd"></i> {{ cat.statistics.sum }} </span>
-    <span class="badge bg-info count"><i class="icon-th-list"></i> {{ cat.statistics.count }} </span-->
-    <span class="sum"><i class="icon-usd"></i> {{ cat.statistics.sum }} </span>
+    <span class="sum"><i class="icon-usd"></i> {{ cat.statistics.sum | categorySumWithChildren:categories[cat._id] }} </span>
     <span class="count"><i class="icon-th-list"></i> {{ cat.statistics.count }} </span>
     
     <span class="filter-icons">

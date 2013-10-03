@@ -64,8 +64,10 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
     
     $scope.finishSorting = function() {
       $scope.isBeingSorted = false;
+
       Category.sort({ projectID: theProject._id, categories: $scope.nestable }, function(categories) {
-        updateSortedCategories(categories)
+        $('[ui-view="categories"] > div > .list-group > li').remove();
+        updateCategoryTreeProcedure(categories);
       });
     }
     
@@ -74,23 +76,24 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
     }
     
     function updateCategoryTree() { 
-      Category.list({ projectID: theProject._id }, null, function(categories) {
-        var cats = {};
+      Category.list({ projectID: theProject._id }, null, updateCategoryTreeProcedure);
+    }
+    
+    function updateCategoryTreeProcedure(categories) { 
+      var cats = {};
+      
+      for (var i=0;i<categories.length;i++) {
+        var parent = categories[i].parent || 'root';
         
-        for (var i=0;i<categories.length;i++) {
-          var parent = categories[i].parent || 'root';
-          
-          if (!cats[parent]) {
-            cats[parent] = [];
-          }
-          cats[parent].push(categories[i]);
+        if (!cats[parent]) {
+          cats[parent] = [];
         }
+        cats[parent].push(categories[i]);
+      }
 
-        theProject.categories = categories;
-        updateSortedCategories(categories);
-        
-        $scope.categories = cats;
-      });
+      theProject.categories = categories;
+      updateSortedCategories(categories);
+      $scope.categories = cats;
     }
     
     function updateSortedCategories(categories) {
@@ -111,6 +114,16 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
     }
     
   }])
+
+  .filter('categorySumWithChildren', function() {
+    return function(sum, children) {
+      if (!children) return sum;
+      for (var i=0;i<children.length;i++) {
+        sum += children[i].statistics.sum;
+      }
+      return sum;
+    }
+  })
 
   .factory('Category', function($resource){
     return $resource('/projects/:projectID/categories/:id', {}, {
