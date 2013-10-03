@@ -19,7 +19,6 @@
     <a href="" ng-if="project.access == 'Owner'" ng-show="isBeingSorted" class="btn btn-danger btn-sm pull-right" ng-click="finishSorting()">Finish sorting</a>
   </div>
 </form>
-<a   ng-click="categories = ''">asdf</a> {{ categories }}
 
 <script type="text/ng-template"  id="project.category.list.branch">
   <a href="" class="edit" ng-click="edit(cat)"><i class="icon-pencil" ng-if="project.access == 'Owner'" ng-show="!isBeingSorted"></i></a>
