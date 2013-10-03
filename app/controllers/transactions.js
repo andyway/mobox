@@ -55,10 +55,17 @@ exports.update = function(req, res) {
 
 exports.destroy = function(req, res) {
   var transaction = req.transaction;
-
-  transaction.remove(function(err) {
-    if (err) return res.render('error', { status: 500 });
-    res.jsonp(transaction);
+  Account.findById(req.transaction.account, function(err, account) {
+    if (err) return res.send(500, err.message);
+    
+    account.updateProjectStatistics(transaction.project, -transaction.sum, -1);
+    req.project.updateStatistics(-transaction.sum, -1, false);
+    Category.updateStatistics(transaction.category, -transaction.sum, -1);
+    
+    transaction.remove(function(err) {
+      if (err) return res.render('error', { status: 500 });
+      res.jsonp(transaction);
+    });
   });
 };
 

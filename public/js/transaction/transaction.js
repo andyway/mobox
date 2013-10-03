@@ -47,6 +47,25 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
       
     }
     
+    $scope.remove = function(transaction) {
+      transaction.$remove({ projectID: theProject._id, id: transaction._id }, function() {
+        var i=0, len = $scope.transactions.length;
+        for (;i<len;i++) {
+          if ($scope.transactions[i]._id == transaction._id) {
+            $scope.transactions.splice(i, 1);
+            $scope.paginate();
+            $scope.reset();
+            theProject.transactionWatch++;
+            break;
+          }
+        }
+      }, function(data) {
+        $scope.error = data.data;
+      });  
+      $scope.reset();
+      theProject.transactionWatch++;
+    }
+    
     $scope.edit = function(transaction) {
       $scope.transaction = transaction;
     }
@@ -58,7 +77,7 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
     $scope.reset();
     
     $scope.filter = function(transaction) {
-      if (theProject.filters.categories.length && theProject.filters.categories.indexOf(transaction.account) < 0) {
+      if (theProject.filters.categories.length && theProject.filters.categories.indexOf(transaction.category) < 0) {
         return false;
       }
       

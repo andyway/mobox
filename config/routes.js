@@ -139,7 +139,6 @@ module.exports = function(app, passport, auth, oauth2) {
   );
   app.del('/projects/:projectId/transactions/:transactionId', auth.requiresLogin, 
     auth.project.checkOwnership, auth.project.checkAccess, auth.project.requireWriteAccess, 
-    accounts.getFromParam, auth.account.checkOwnership, auth.account.checkAccess, auth.account.requireWriteAccess, 
     auth.transaction.requireOwnershipOrAdminAccess, transactions.destroy
   );
   
