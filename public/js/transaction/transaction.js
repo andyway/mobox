@@ -56,7 +56,7 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
     $scope.reset();
     
     $scope.filter = function(transaction) {
-      if (theProject.filters.categories.length && !_.intersection(theProject.filters.categories, transaction.categories).length) {
+      if (theProject.filters.categories.length && theProject.filters.categories.indexOf(transaction.account) < 0) {
         return false;
       }
       

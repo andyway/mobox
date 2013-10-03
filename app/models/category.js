@@ -44,8 +44,8 @@ var CategorySchema = new Schema({
   }
 });
 
-CategorySchema.statics.updateStatistics = function (categories, sum, count) {
-  this.update({ _id: { $in: categories } }, { $inc: { 'statistics.count': count, 'statistics.sum': sum } }, { multi: true }).exec();
+CategorySchema.statics.updateStatistics = function (category, sum, count) {
+  this.findByIdAndUpdate(category, { $inc: { 'statistics.count': count, 'statistics.sum': sum } }).exec();
 }
 
 mongoose.model('Category', CategorySchema);

@@ -37,10 +37,10 @@ var TransactionSchema = new Schema({
     ref: 'Project',
     required: true
   },
-  categories: [{
+  category: {
     type: Schema.ObjectId,
     ref: 'Category'
-  }],
+  },
   created: {
     type: Date,
     default: Date.now,

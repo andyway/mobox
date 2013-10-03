@@ -21,7 +21,7 @@
       </div>
       <div class="form-group col-sm-2">
         <label for="formCategory">Category</label>
-        <select class="form-control input-sm" id="formCategory" ng-model="transaction.categories" ng-options="category._id as category.name for category in theProject.categories" required multiple chosen data-placeholder="Category" ng-required></select>
+        <select class="form-control input-sm" id="formCategory" ng-model="transaction.category" ng-options="category._id as category.name for category in theProject.categories" required ng-required></select>
       </div>
       <div class="form-group col-sm-3">
         <label for="formDescription">Description</label>
@@ -48,7 +48,7 @@
         </div>
         <div class="text-xs block m-t-sm">
           Created by {{ theProject.sortedUsers[tr.created_by] }} on {{ tr.created | date:'yyyy-MM-dd HH:mm:ss' }}
-          <span class="label bg-info pull-right" ng-repeat="category in tr.categories" ng-style="{ backgroundColor: theProject.sortedCategories[category].color }"><i class="icon-map-marker"></i> {{ theProject.sortedCategories[category].name }}</span>
+          <span class="label bg-info pull-right" ng-style="{ backgroundColor: theProject.sortedCategories[tr.category].color }"><i class="icon-map-marker"></i> {{ theProject.sortedCategories[tr.category].name }}</span>
         </div>
       </div>
     </li>

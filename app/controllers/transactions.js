@@ -26,7 +26,7 @@ exports.create = function(req, res, next) {
     
     isNewTransactionForAccount = req.account.updateProjectStatistics(transaction.project, transaction.sum, 1);
     req.project.updateStatistics(transaction.sum, 1, isNewTransactionForAccount);
-    Category.updateStatistics(transaction.categories, transaction.sum, 1);
+    Category.updateStatistics(transaction.category, transaction.sum, 1);
     
     res.jsonp(transaction);
   });
@@ -37,7 +37,7 @@ exports.update = function(req, res) {
 
   req.account.updateProjectStatistics(transaction.project, -transaction.sum, -1);
   req.project.updateStatistics(-transaction.sum, -1, false);
-  Category.updateStatistics(transaction.categories, -transaction.sum, -1);
+  Category.updateStatistics(transaction.category, -transaction.sum, -1);
   
   transaction = _.extend(transaction, req.body);
   transaction.project = req.project;
@@ -47,7 +47,7 @@ exports.update = function(req, res) {
     
     isNewTransactionForAccount = req.account.updateProjectStatistics(transaction.project, transaction.sum, 1);
     req.project.updateStatistics(transaction.sum, 1, isNewTransactionForAccount);
-    Category.updateStatistics(transaction.categories, transaction.sum, 1);
+    Category.updateStatistics(transaction.category, transaction.sum, 1);
     
     res.jsonp(transaction);
   });
