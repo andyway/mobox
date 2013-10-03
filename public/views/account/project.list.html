@@ -24,7 +24,7 @@
   <h5>Add accounts to the Project</h5>
   <div class="alert alert-danger" ng-show="error">An error has occured: {{ error }}.</div>
   <div class="form-group">
-    <select class="form-control input-sm" ng-model="account" ng-options="account._id as account.name for account in AccountFactory.userAccounts" required></select>
+    <select class="form-control input-sm" ng-model="account.id" ng-options="acc._id as acc.name for acc in AccountFactory.userAccounts" required></select>
   </div>
   <div class="form-group">
     <input type="submit" value="Add" class="btn btn-sm btn-primary" />

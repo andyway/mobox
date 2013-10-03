@@ -120,6 +120,7 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     
     
     $scope.AccountFactory = AccountFactory;
+    $scope.account = {};
     
     $scope.toggleFilter = function(account) {
       var index = _.indexOf(theProject.filters.accounts, account._id);
@@ -134,7 +135,7 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     $scope.submit = function() {
       $scope.error = false;
       
-      new Project({account: $scope.account}).$addAccount({ id: theProject._id }, function(data) {
+      new Project({account: $scope.account.id }).$addAccount({ id: theProject._id }, function(data) {
         theProject.accounts = data.accounts;
         sortAccounts();
       }, function(data) {
