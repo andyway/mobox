@@ -1,5 +1,5 @@
 <div class="panel-body">
-  <form role="form" class="form-inline" ng-submit="submit()">
+  <form role="form" class="form-inline" ng-submit="submit()" ng-if="project.access == 'Owner' || project.access == 'Admin' || project.access == 'Write'">
     <div class="alert alert-danger" ng-show="error">Error creating transaction: {{ error }}</div>
     <div class="row">
       <div class="form-group col-sm-2">
@@ -17,7 +17,7 @@
       </div>
       <div class="form-group col-sm-2">
         <label for="formAccount">Account</label>
-        <select class="form-control input-sm" id="formAccount" ng-model="transaction.account" ng-options="account._id as account.name for account in AccountFactory.projectAccounts" required></select>
+        <select class="form-control input-sm" id="formAccount" ng-model="transaction.account" ng-options="account._id as account.name for account in theProject.accounts" required></select>
       </div>
       <div class="form-group col-sm-2">
         <label for="formCategory">Category</label>

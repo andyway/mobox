@@ -1,14 +1,16 @@
 <div class="list-group no-radius alt">
-  <div class="list-group-item clearfix" ng-repeat="acc in AccountFactory.projectAccounts">
-    <div ng-access-triangle="{ access: acc.access }"></div>
+  <div class="list-group-item clearfix" ng-repeat="acc in project.accounts">
+    <div></div>
     <div class="col-lg-4">
       <span class="h4">{{ acc.balance|number:2 }}</span><i class="icon-{{ acc.currency.code.toLowerCase() }}"></i>
     </div>
-    <span class="font-semibold">{{ acc.name }}</span>
+    <span class="h5">
+      <i class="icon-remove remove" ng-if="project.access == 'Owner' || project.access == 'Admin'" ng-click="remove(acc)"></i>
+      {{ acc.name }}
+    </span>
     <span class="pull-right badges">
-      <!--span class="badge sum" ng-class="{ 'bg-success': (acc.statistics.sum > 0), 'bg-danger': (acc.statistics.sum < 0) }"><i class="icon-{{ acc.currency.code.toLowerCase() }}"></i> {{ acc.statistics.sum }} </span>
-      <span class="badge bg-info count"><i class="icon-th-list"></i> {{ acc.statistics.count }} </span-->
-      <span class="sum"><i class="icon-{{ acc.currency.code.toLowerCase() }}"></i> {{ acc.statistics.sum }} </span>
+
+      <span class="sum"><i class="icon-{{ acc.currency.code.toLowerCase() }}"></i> {{ acc.statistics.sum|number:2 }} </span>
       <span class="count"><i class="icon-th-list"></i> {{ acc.statistics.count }} </span>
       
       <span class="filter-icons">
@@ -18,3 +20,13 @@
     </span> 
   </div>
 </div>
+<form role="form" class="col-sm-12" ng-submit="submit()" ng-if="project.access == 'Owner' || project.access == 'Admin'">
+  <h5>Add accounts to the Project</h5>
+  <div class="alert alert-danger" ng-show="error">An error has occured: {{ error }}.</div>
+  <div class="form-group">
+    <select class="form-control input-sm" ng-model="account" ng-options="account._id as account.name for account in AccountFactory.userAccounts" required></select>
+  </div>
+  <div class="form-group">
+    <input type="submit" value="Add" class="btn btn-sm btn-primary" />
+  </div>
+</form>

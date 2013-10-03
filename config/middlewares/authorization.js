@@ -13,6 +13,16 @@ exports.project = {
     next();
   },
   
+  checkAccess: function(req, res, next) {
+    if (req.isProjectOwner) {
+      req.accessProject = 'Owner';
+    }
+    else {
+      req.accessProject = req.project.getAccess(req.user);
+    }
+    next();
+  },
+  
   requireOwnership: function(req, res, next) {
     if (!req.isProjectOwner) {
       return res.send(403, 'Access denied - Project Ownership is required');
@@ -21,23 +31,36 @@ exports.project = {
   },
   
   requireReadAccess: function(req, res, next) {
-    if (req.isProjectOwner) return next();
-    if (req.project.getAccess(req.user)) return next();
+    if (req.accessProject) return next();
     return res.send(403, 'Access denied - Project Read Access is required');
   },
   
   requireWriteAccess: function(req, res, next) {
-    if (req.isProjectOwner) return next();
-    if (req.project.getAccess(req.user) == 'Write') return next();
+    if (req.accessProject == 'Write' || req.accessProject == 'Admin' || req.accessProject == 'Owner') return next();
     return res.send(403, 'Access denied - Project Write Access is required');
-  }
+  },
 
+  requireAdminAccess: function(req, res, next) {
+    if (req.accessProject == 'Admin' || req.accessProject == 'Owner') return next();
+    return res.send(403, 'Access denied - Project Admin Access is required');
+  }
+  
 };
 
 exports.account = {
   checkOwnership: function(req, res, next) {
     if (req.account.user.toString() == req.user.id) {
       req.isAccountOwner = true;
+    }
+    next();
+  },
+  
+  checkAccess: function(req, res, next) {
+    if (req.isAccountOwner) {
+      req.accessAccount = 'Owner';
+    }
+    else {
+      req.accessAccount = req.account.getAccess(req.user);
     }
     next();
   },
@@ -50,16 +73,30 @@ exports.account = {
   },
   
   requireReadAccess: function(req, res, next) {
-    if (req.isAccountOwner) return next();
-    if (req.account.getAccess(req.user)) return next();
+    if (req.accessAccount) return next();
     return res.send(403, 'Access denied - Account Read Access is required');
   },
   
   requireWriteAccess: function(req, res, next) {
-    if (req.isAccountOwner) return next();
-    if (req.account.getAccess(req.user) == 'Write') return next();
-    return res.send(403, 'Access denied - Account Write Access is required');
-  }
+    if (req.accessAccount == 'Write' || req.accessAccount == 'Admin' || req.accessAccount == 'Owner') return next();
+    return res.send(403, 'Access denied - Account Admin Access is required');
+  },
 
+  requireAdminAccess: function(req, res, next) {
+    if (req.accessAccount == 'Admin' || req.accessAccount == 'Owner') return next();
+    return res.send(403, 'Access denied - Account Admin Access is required');
+  }
+  
+};
+
+exports.transaction = {
+  requireOwnershipOrAdminAccess: function(req, res, next) {
+    if (req.transaction.created_by.toString() == req.user.id || req.accessProject == 'Admin' || req.accessProject == 'Owner') {
+      return next();
+    }
+    return res.send(403, 'Access denied - You can not modify others` transactions');
+  }
+  
+  
 };
 

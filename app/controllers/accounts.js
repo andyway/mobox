@@ -55,7 +55,7 @@ exports.destroy = function(req, res) {
 };
 
 exports.show = function(req, res) {
-  if (req.isAccountOwner) res.jsonp(req.account.toOwnerJSON());
+  if (req.isAccountOwner || req.accessAccount == 'Admin') res.jsonp(req.account.toOwnerJSON(req.accessAccount));
   else {
     res.jsonp(req.account.toUserJSON(req.user));
   }
@@ -77,7 +77,7 @@ exports.all = function(req, res) {
           result.push(accounts[i].toUserJSON(req.user));
         }
         else {
-          result.push(accounts[i].toOwnerJSON());
+          result.push(accounts[i].toOwnerJSON(access));
         }
         
       }
@@ -93,13 +93,13 @@ exports.addAccess = function(req, res, next) {
   }
   req.account.setAccess(req.accessUser, [req.query.access]);
   req.account.save(function(err, account) {
-    res.jsonp(account.toOwnerJSON());
+    res.jsonp(account.toOwnerJSON(req.accessAccount));
   });
 };
 
 exports.removeAccess = function(req, res, next) {
   req.account.removeAccess(req.accessUser);
   req.account.save(function(err, account) {
-    res.jsonp(account.toOwnerJSON());
+    res.jsonp(account.toOwnerJSON(req.accessAccount));
   });
 };

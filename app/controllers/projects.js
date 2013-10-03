@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
   _ = require('underscore');
 
 exports.project = function(req, res, next, id) {
-  Project.findById(id, function(err, project) {
+  Project.findById(id).populate('accounts').exec(function(err, project) {
     if (err) return next(err);
     if (!project) return next(new Error('Failed to load project ' + id));
     
@@ -45,7 +45,7 @@ exports.destroy = function(req, res) {
 };
 
 exports.show = function(req, res) {
-  if (req.isProjectOwner) res.jsonp(req.project.toOwnerJSON());
+  if (req.isProjectOwner || req.accessProject == 'Admin') res.jsonp(req.project.toOwnerJSON(req.accessProject));
   else {
     res.jsonp(req.project.toUserJSON(req.user));
   }
@@ -67,7 +67,7 @@ exports.all = function(req, res) {
           result.push(projects[i].toUserJSON(req.user));
         }
         else {
-          result.push(projects[i].toOwnerJSON());
+          result.push(projects[i].toOwnerJSON(access));
         }
         
       }
@@ -83,14 +83,40 @@ exports.addAccess = function(req, res, next) {
   }
   req.project.setAccess(req.accessUser, [req.query.access]);
   req.project.save(function(err, project) {
-    res.jsonp(project.toOwnerJSON());
+    res.jsonp(project.toOwnerJSON(req.accessProject));
   });
 };
 
 exports.removeAccess = function(req, res, next) {
   req.project.removeAccess(req.accessUser);
   req.project.save(function(err, project) {
-    res.jsonp(project.toOwnerJSON());
+    res.jsonp(project.toOwnerJSON(req.accessProject));
   });
 };
 
+exports.addAccount = function(req, res, next) {
+  var access = req.query.access;
+
+  for (var i=0;i<req.project.accounts.length; i++) {
+    if (req.project.accounts[i].toString() == req.account) {
+      req.project.accounts.splice(i, 1);
+    }
+  }
+
+  req.project.accounts.push(req.account);
+  req.project.save(function(err, project) {
+    res.jsonp(project.toOwnerJSON(req.accessProject));
+  });
+};
+
+exports.removeAccount = function(req, res, next) {
+  var account = req.query.account;
+  for (var i=0;i<req.project.accounts.length; i++) {
+    if (req.project.accounts[i]._id.toString() == account) {
+      req.project.accounts.splice(i, 1);
+    }
+  }
+  req.project.save(function(err, project) {
+    res.jsonp(project.toOwnerJSON(req.accessProject));
+  });
+};

@@ -191,11 +191,14 @@ angular.module('expence.project', ['ngResource', 'ui.router', 'expence.root'])
   .factory('Project', function($resource){
     return $resource('/projects/:id/:method', {}, {
       list: { method:'GET', params: { id: '@_id' }, isArray: true },
+      get: { method:'GET', params: { id: '@_id' }, isArray: false },
       update: { method:'POST', params: { id: '@_id' } },
       create: { method:'PUT', params: { id: '@_id' } },
       remove: { method:'DELETE', params: { id: '@_id' } },
       addAccess: { method:'PUT', params: { id: '@_id', method: 'access' } },
-      removeAccess: { method:'DELETE', params: { id: '@_id', method: 'access', value: '@username' } }
+      removeAccess: { method:'DELETE', params: { id: '@_id', method: 'access', value: '@username' } },
+      addAccount: { method:'PUT', params: { id: '@_id', method: 'accounts', account: '@account' } },
+      removeAccount: { method:'DELETE', params: { id: '@_id', method: 'accounts', account: '@account' } }
     });
   })
   

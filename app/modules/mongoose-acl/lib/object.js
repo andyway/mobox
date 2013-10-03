@@ -107,10 +107,15 @@ module.exports = function(schema, options) {
         return data;
     };
 
-    schema.methods.toOwnerJSON = function() {
+    schema.methods.toOwnerJSON = function(access) {
       var data = toJSON ? toJSON.call(this) : this.toObject();
       
-      data.access = 'Owner';
+      if (access && access == 'Admin') {
+        data.access = 'Admin';
+      }
+      else {
+        data.access = 'Owner';
+      }
       return data;
     };
 

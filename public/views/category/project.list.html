@@ -3,7 +3,7 @@
     <li class="list-group-item dd-item" ng-repeat="cat in categories.root" data-id="{{ cat._id }}" ng-include="'project.category.list.branch'"></li>
   </ol>
 </div>
-<form role="form" class="col-sm-12" ng-submit="submit()" ng-if="project.access == 'Owner'">
+<form role="form" class="col-sm-12" ng-submit="submit()" ng-if="project.access == 'Owner' || project.access == 'Admin'">
   <div class="form-group">            
     <div class="input-group m-b">
       <span class="input-group-addon"><input type="text" ng-model="category.color" value="{{ category.color }}" colorpicker></span>
@@ -15,8 +15,8 @@
     <input type="submit" value="Save" class="btn btn-sm btn-primary" ng-show="category._id" />
     <input type="button" ng-click="remove(category)" value="Remove" class="btn btn-sm btn-danger" ng-show="category._id" />
 
-    <a href="" ng-if="project.access == 'Owner'" ng-show="!isBeingSorted" class="btn btn-danger btn-sm pull-right" ng-click="startSorting()">Sort</a>
-    <a href="" ng-if="project.access == 'Owner'" ng-show="isBeingSorted" class="btn btn-danger btn-sm pull-right" ng-click="finishSorting()">Finish sorting</a>
+    <a href="" ng-show="!isBeingSorted" class="btn btn-danger btn-sm pull-right" ng-click="startSorting()">Sort</a>
+    <a href="" ng-show="isBeingSorted" class="btn btn-danger btn-sm pull-right" ng-click="finishSorting()">Finish sorting</a>
   </div>
 </form>
 
@@ -27,7 +27,7 @@
   {{ cat.name }}
   
   <span class="pull-right badges">               
-    <span class="sum"><i class="icon-usd"></i> {{ cat.statistics.sum | categorySumWithChildren:categories[cat._id] }} </span>
+    <span class="sum"><i class="icon-usd"></i> {{ cat.statistics.sum | categorySumWithChildren:categories[cat._id] |number:2 }} </span>
     <span class="count"><i class="icon-th-list"></i> {{ cat.statistics.count }} </span>
     
     <span class="filter-icons">

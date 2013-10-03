@@ -18,7 +18,7 @@
     <div ui-view="accounts"></div>
   </section>    
                                       
-  <section class="panel" ng-if="project.access == 'Owner'">
+  <section class="panel" ng-if="project.access == 'Owner' || project.access == 'Admin'">
     <header class="panel-heading bg-info lter no-borders">
       
       <div class="clearfix h5 font-thin"><i class="icon-user"></i> Users</div>

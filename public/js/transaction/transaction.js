@@ -27,7 +27,9 @@ angular.module('expence.transaction', ['ngResource', 'ui.router', 'expence.proje
       
       transaction = $.extend(transaction, $scope.transaction);
       if (transaction._id) {
-        transaction.$update({ projectID: theProject._id });  
+        transaction.$update({ projectID: theProject._id }, null, function(data) {
+          $scope.error = data.data;
+        });  
         $scope.reset();
         theProject.transactionWatch++;
       }

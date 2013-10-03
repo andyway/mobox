@@ -87,6 +87,9 @@ angular.module('expence.root', ['ngResource', 'ui.router', 'ui.bootstrap'])
         if (options.access == 'Owner') {
           elm.append('<label title="Owner access"><i class="icon-check"></i></label>');
         }
+        if (options.access == 'Admin') {
+          elm.append('<label title="Admin access"><i class="icon-cog"></i></label>');
+        }
         if (options.access == 'Read') {
           elm.append('<label title="Read access"><i class="icon-eye-open"></i></label>');
         }

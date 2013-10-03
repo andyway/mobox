@@ -20,6 +20,10 @@ var ProjectSchema = new Schema({
     ref: 'User',
     required: true
   },
+  accounts: [{
+    type: Schema.ObjectId,
+    ref: 'Account',
+  }],
   statistics: {
     sum: {
       type: Number,

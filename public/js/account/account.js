@@ -107,21 +107,19 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
     $scope.AccountFactory = AccountFactory;
   }])
 
-  .controller('project.account.list', ['$scope', '$state', 'theProject', 'AccountFactory', 'Account', function($scope, $state, theProject, AccountFactory, Account) {
+  .controller('project.account.list', ['$scope', '$state', 'theProject', 'AccountFactory', 'Account', 'Project', function($scope, $state, theProject, AccountFactory, Account, Project) {
     theProject.$then(function() {
-      $scope.initAccounts();
+      sortAccounts();
       
       $scope.$watch('project.transactionWatch', function(val) {
         if (theProject.transactionWatch && theProject.transactionWatch > 0) {
-          $scope.initAccounts();
+          updateAccounts();
         }
       });
     });
     
     
-
     $scope.AccountFactory = AccountFactory;
-    theProject.accounts = AccountFactory.projectAccounts;
     
     $scope.toggleFilter = function(account) {
       var index = _.indexOf(theProject.filters.accounts, account._id);
@@ -133,28 +131,51 @@ angular.module('expence.account', ['ngResource', 'ui.router', 'expence.root'])
       }
     }
     
-    $scope.initAccounts = function() {
-      Account.list(null, function(data) {
-        AccountFactory.projectAccounts = data;
-        theProject.sortedAccounts = {};
-        
-        for (var i=0;i<data.length;i++) {
-          
-          if (data[i].statistics) {
-            for (var j=0;j<data[i].statistics.length;j++) {
-              if (data[i].statistics[j].project == theProject._id.toString()) {
-                data[i].statistics = data[i].statistics[j];
-                break;
-              }  
-            }
-          }
-          
-          theProject.sortedAccounts[data[i]._id] = data[i];
-        }
-        
+    $scope.submit = function() {
+      $scope.error = false;
+      
+      new Project({account: $scope.account}).$addAccount({ id: theProject._id }, function(data) {
+        theProject.accounts = data.accounts;
+        sortAccounts();
+      }, function(data) {
+        $scope.error = data.data;
+      });  
+    }
+    
+    $scope.remove = function(account) {
+      Project.removeAccount({ id: theProject._id, account: account._id }, function(data) {
+        theProject.accounts = data.accounts;
+        sortAccounts();
+      }, function(data) {
+        $scope.error = data.data;
+      });  
+    }
+    
+    function updateAccounts() {
+      Project.get({ id: theProject._id }, function(data) {
+        theProject.accounts = data.accounts;
+        sortAccounts();
       });
     }
     
+    function sortAccounts() {
+      theProject.sortedAccounts = {};
+      
+      for (var i=0;i<theProject.accounts.length;i++) {
+        
+        if (theProject.accounts[i].statistics) {
+          for (var j=0;j<theProject.accounts[i].statistics.length;j++) {
+            if (theProject.accounts[i].statistics[j].project == theProject._id.toString()) {
+              theProject.accounts[i].statistics = theProject.accounts[i].statistics[j];
+              break;
+            }  
+          }
+        }
+        
+        theProject.sortedAccounts[theProject.accounts[i]._id] = theProject.accounts[i];
+      }
+    }
+
   }])
   
   .factory('Account', function($resource){
