@@ -9,7 +9,8 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
 
   .controller('project.category.list', ['$scope', '$state', 'theProject', 'Category', function($scope, $state, theProject, Category) {
     $scope.isBeingSorted = false;
-    $scope.category = { color: '#0088cc' };
+    $scope.category = { color: get_random_color() };
+    $scope.color_changed = 0;
     
     theProject.$then(function() {
       updateCategoryTree();
@@ -31,16 +32,18 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
         category.$update({ projectID: theProject._id });  
       }
       else {
-        console.log($scope.category);
         category.$create({ projectID: theProject._id });
         updateCategoryTree();
       }
       
-      $scope.category = { color: '#0088cc' };
+      $scope.color_changed++;
+      $scope.category = { color: get_random_color() };
+      
     }
     
     $scope.edit = function(cat) {
-      $scope.category = cat;  
+      $scope.category = cat;
+      $scope.color_changed++;  
     }
     
     $scope.remove = function(category) {
@@ -98,6 +101,15 @@ angular.module('expence.category', ['ngResource', 'ui.router', 'expence.project'
       
     }
   
+    function get_random_color() {
+      var letters = '0123456789ABCDEF'.split('');
+      var color = '#';
+      for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.round(Math.random() * 15)];
+      }
+      return color;
+    }
+    
   }])
 
   .factory('Category', function($resource){

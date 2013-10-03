@@ -104,7 +104,11 @@ angular.module('expence.root', ['ngResource', 'ui.router', 'ui.bootstrap'])
         var options = scope.$eval(attrs.colorpicker);
         
         elm.minicolors(options);
-        
+        scope.$watch('color_changed', function(val) {
+          setTimeout(function() {
+            elm.minicolors('value', scope.category.color);
+          }, 10);
+        });
       }
     };
   })
