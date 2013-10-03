@@ -36,7 +36,7 @@
         <i class="icon-signal icon-muted"></i> Accounts
       </a>
       <a href="#" class="list-group-item">
-        <span class="badge bg-light" ng-class="{ 'bg-success': (project.statistics.sum > 0), 'bg-danger': (project.statistics.sum < 0) }">{{ project.statistics.sum }}</span>
+        <span class="badge bg-light" ng-class="{ 'bg-success': (project.statistics.sum > 0), 'bg-danger': (project.statistics.sum < 0) }">{{ project.statistics.sum | number:2 }}</span>
         <i class="icon-usd icon-muted"></i> Cash flow
       </a>
       <a href="#" class="list-group-item">

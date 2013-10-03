@@ -31,7 +31,7 @@
         <br />
         <button type="button" class="btn btn-danger" ng-show="transaction._id" ng-click="remove(transaction)">Delete</button>
         <button type="submit" class="btn btn-default pull-right" ng-show="!transaction._id">Create</button>
-        <button type="button" class="btn btn-info" ng-show="!transaction._id" ng-click="batch()">Create {{ transaction.description }}</button>
+        <button type="button" class="btn btn-info" ng-show="!transaction._id" ng-click="batch()">Batch: {{ transaction.description }}</button>
         <button type="submit" class="btn btn-default pull-right" ng-show="transaction._id">Update</button>
       </div>
     </div>
